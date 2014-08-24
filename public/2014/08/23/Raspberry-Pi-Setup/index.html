@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Raspberry Pi Setup | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="How to setup a Raspberry Pi (assuming you’ve already bought the supporting components, like a power supply, wiki dongle, and ethernet cable.)
+Plug SD ">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Raspberry Pi Setup</h1>
+  
+
+    <time datetime="2014-08-23T21:41:18.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><strong>How to setup a Raspberry Pi</strong> (assuming you’ve already bought the supporting components, like a power supply, wiki dongle, and ethernet cable.)</p>
+<p>Plug SD card into your computer to format</p>
+<p>Open disk utility and erase card. Set the name and the format to “MS-DOS (FAT)”</p>
+<figure class="highlight " bash""=""><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">diskutil list</div><div class="line"># <span class="keyword">find</span> your card, example <span class="regexp">/dev/</span>disk38</div><div class="line">diskutil unmountdisk <span class="regexp">/dev/</span>disk38</div></pre></td></tr></table></figure>
+
+<p>Download your pi OS image and cd to folder. <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Download</a></p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo dd <span class="keyword">if</span>=<span class="number">2014</span>-<span class="number">06</span>-<span class="number">20</span>-wheezy-raspbian.img of=<span class="regexp">/dev/</span>disk38 bs=<span class="number">2</span>m</div><div class="line"># (flash OS image onto card, <span class="keyword">if</span>=<span class="keyword">source</span>, of=target, bs=<span class="keyword">size</span>)</div></pre></td></tr></table></figure>
+
+<p>Plug in peripherals, like keyboard, ethernet cable, and power</p>
+<p>In order to locate your pi on the wifi network, install mmap, run it, and ssh into your pi</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ifconfig (<span class="keyword">get</span> local ip address)</div><div class="line">nmap -sn <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span></div><div class="line">ssh pi@<span class="number">192.168</span><span class="number">.1</span><span class="number">.88</span></div><div class="line"><span class="preprocessor"># username= pi</span></div><div class="line"><span class="preprocessor"># password= raspberry</span></div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo raspi-config</div><div class="line">(<span class="operator"><span class="keyword">set</span> <span class="keyword">password</span>, OS <span class="keyword">size</span>, locale, )</span></div><div class="line">username= <span class="keyword">pi</span></div><div class="line"><span class="keyword">password</span>= typical</div></pre></td></tr></table></figure>
+
+<p>Set up environment</p>
+<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></div><div class="line">sudo apt-<span class="built_in">get</span> upgrade</div><div class="line">sudo apt-<span class="built_in">get</span> autoremove</div></pre></td></tr></table></figure>
+
+<p>Wifi dongle setup</p>
+<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo cp /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf.bak</div><div class="line">sudo nano /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf</div></pre></td></tr></table></figure>
+
+<p>Change your ssid/password</p>
+<figure class="highlight " nginx""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="variable">ctrl_interface=</span><span class="variable">DIR=</span>/var/run/wpa_supplicant <span class="variable">GROUP=</span>netdev</div><div class="line"><span class="variable">update_config=</span><span class="number">1</span></div><div class="line"></div><div class="line"><span class="variable">network=</span>{</div><div class="line">        <span class="variable">ssid=</span><span class="string">"your_ssid"</span></div><div class="line">        <span class="variable">psk=</span><span class="string">"your_pass"</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Reboot and log back in<br><code>sudo reboot</code></p>
+<figure class="highlight " bash""=""><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="title">nmap</span> -sn <span class="number">192.168.1.0</span>/<span class="number">24</span></div><div class="line"><span class="comment"># find ip address again</span></div><div class="line">ssh pi@<span class="number">192.168.1.56</span></div></pre></td></tr></table></figure>
+
+<p><strong>Extra:</strong><br>for GUI, after you plugin a monitor<br><code>startx</code> </p>
+<p>Shutdown command<br><code>sudo shutdown -h now</code></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2014 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

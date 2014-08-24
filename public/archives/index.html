@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Archives | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner">
+
+<header id="archive-header">
+  <h1 class="alignleft">Archives</h1>
+  <div class="search alignright">
+    <form action="http://google.com/search" method="get" accept-charset="utf-8">
+      <input type="search" name="q" results="0" placeholder="Search">
+      <input type="hidden" name="q" value="site:bereketabraham.com/blog">
+    </form>
+  </div>
+</header>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/24/Decoupled-Web-Apps/">Decoupled Web Apps</a></h1>
+  
+
+    <time datetime="2014-08-24T07:59:23.000Z">
+  <span class="day">24</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h1 id="Decoupled_web_applications_and_simplified_deployment">Decoupled web applications and simplified deployment</h1>
+<p>Recently, </p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/24/LED-Table,-Part-2/">LED Table, Part 2</a></h1>
+  
+
+    <time datetime="2014-08-24T07:55:23.000Z">
+  <span class="day">24</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><em>Please read part 1 for the full story.</em></p>
+<h2 id="Hardware">Hardware</h2>
+<p>The table construction was definitely the most fun part. The steps were basically measure, cut, sand, stain, screw together, stain, stain, and stain. I made a few mistakes but they were easily covered up using glue and wood filler. I used pegs to join the boards and help hide most of the screws. </p>
+<p><img src="table.png" alt="Table Construction" title="Table Construction"></p>
+<p>Next came the grid to house each individual LED. The grid is needed to prevent different colors from blending together and to help reflect the light upward. Finding the right material was actually pretty hard. I tried thin plywood but it was impossible to cut the precise notches. Judging from the pictures, the Wisconsin student used laser cut balsa wood, but that was too expensive for me. I ended up taking stiff cardboard and cutting out shapes with a box cutter (with plywood sides for support). A professional build would probably use injection-molded plastic, which becomes very cheap at high volumes. Another neat thing I did was make the grid housing removable, so that I can hang it on the wall as a standalone art piece. </p>
+<p><img src="grid.png" alt="Grid" title="Grid"></p>
+<h2 id="Software,_part_2">Software, part 2</h2>
+<p>The next major component was the website’s user interface. The first thing I wrote was a simple textbox for testing. I knew the real UI would probably need a color picker and an animation of the table. The first iteration used the canvas element in HTML5 to draw shapes java-style. However, it was really hard to set the event listeners so I switched to a great JavaScript library called FabricJS. It lets you create shapes as objects, so you can then naturally add listeners, set values, and create custom methods.<br>The next iteration will use the length of time a cell was pressed to help set the color / brightness. </p>
+<p><img src="ui.png" alt="LED UI" title="LED UI"></p>
+<p>Extensions</p>
+<p>Now that the table is mostly functional I can start thinking about extensions and add-ons. The most popular (and complicated) extension would be touch interactivity on the glass surface. Most DIY solutions involve building a grid of IR emitters and receivers. The chief advantages are simplicity and the ability to detect inanimate objects. However, I feel that they are outweighed by many disadvantages; for example, IR sensors can be washed out by house lights and the sun, wiring each emitter-receiver pair is difficult and error prone, and individual sensors results in very low resolution. Luckily, the popularity of touch screen devices has created a number of capacitive touch technologies to choose from. One solution was to place very cheap capacitive touch switches under the glass by each light cell. The switches are robust but face the same wiring and resolution problems as the IR detectors. Another solution was to use a special capacitive touch controller to monitor the entire surface at once (up to a certain size). The controller measures slight variations in the electrical field to pinpoint the exact location of a finger touch.</p>
+<p>Another possible extension would be audio output based on the current light configuration. This <a href="http://tonematrix.audiotool.com" target="_blank" rel="external">web app</a> is a pretty neat example of what you can do. Also, I could wire up a circuit to detect and process audio input, and create a music visualizer.</p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/LED-Table,-Part-1/">LED Table, Part 1</a></h1>
+  
+
+    <time datetime="2014-08-24T02:04:00.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="The_idea">The idea</h2>
+<p>A few months ago, I decided it was time to start a new side project. I really enjoyed using Arduinos in my senior thesis, so I decided that my next project would be centered around them. Just like before, I started searching websites like hackaday.com and instructables.com for inspiration. Eventually, I stumbled upon the idea of a LED enabled coffee table. A lot of people had tried it before with varying degrees of success. However, I believed that there were still serious engineering challenges that could be solved or simplified, as well as significant areas to reduce cost.</p>
+<p>Here is a pretty neat example by a mechanical engineering student in Wisconsin (<a href="http://imgur.com/a/CGV17" target="_blank" rel="external">images</a>). Underneath the glass top was about 100 individually addressable LEDs. Each LED could change color and brightness, and they were all connected to the same SPI bus. In addition, the builder had wired each light cell with an IR detector and emitter to sense touches and objects on the glass surface. The end result was a beautiful frosted glass table that could create an instant dance party. </p>
+<p>I started the project with an intense research and design phase. I immediately decided that touch control was a secondary goal of the project, due to the cost and complexity of wiring each individual light cell. Next came determining the dimensions, material, costs, suppliers, etc. </p>
+<p><img src="model.png" alt="Google Sketch Up" title="Google Sketch Up"></p>
+<h2 id="Software">Software</h2>
+<p>While waiting for all of my part to be delivered, I started working on the Arduino code. Controlling the lights was easy, using the very convenient FastSPI library. The next step was creating a website to control the light values (using the Ethernet shield to connect to the internet). A table is an inherently social object, so I knew I had to architect in multiuser support from the beginning. My first thought was use the Arduino as a webserver and create an API for the table. My actual server (cloud-hosting Linux server) would serve the UI, with the IP address of my Arduino hardcoded into the client code. The client could then query the status of each LED and set individual values. I succeeded in building a prototype but there were two crucial problems. First, I was running it off of my home network so I had to track my IP address and use port forwarding to expose my device to the Internet. Second, and more worrisome, the Arduino was incredibly slow. My solution to these challenges was to put a Raspberry Pi in front of the Arduino and to build out a socket.io server on my remote Linux instance. Socket.io wraps several technologies like long polling and websockets to allow the client and server to both push and pull commands. Now, my table is simply a client receiving commands from a set of other “user” clients. The Raspberry Pi (a headless Linux computer) manages the connection and forwards new commands to the Arduino over serial. </p>
+<p><img src="diagram.png" alt="System Architecture" title="System Architecture"></p>
+<p>One might wonder why I needed both an Arduino and a Raspberry Pi. I needed the Arduino because the RPi didn’t have a high enough clock speed for the WS2811 LED controllers. Also, the RPi was faster and cheaper than the Arduino WiFi shield. More generally, it was nice to have a dedicated component for each function, networking and hardware control, rather than one that could only sort of do both.</p>
+<p><img src="electronics.png" alt="Electronics" title="Electronics"></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+
+  <nav id="pagenavi">
+  
+  
+    <a href="/blog/archives/page/2/" class="alignright next">Next</a>
+  
+  <div class="clearfix"></div>
+</nav>
+</div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2014 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

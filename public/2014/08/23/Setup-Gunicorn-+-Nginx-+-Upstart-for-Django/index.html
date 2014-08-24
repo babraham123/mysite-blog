@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Setup Gunicorn + Nginx + Upstart for Django | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications.">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Setup Gunicorn + Nginx + Upstart for Django</h1>
+  
+
+    <time datetime="2014-08-23T21:11:29.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Nginx_is_a_high-performance_HTTP_server_and_reverse_proxy-_I_use_it_to_serve_static_files_and_route_incoming_requests_among_multiple_web_applications-_Gunicorn_is_a_Python_WSGI_HTTP_Server_for_UNIX_that_I_use_to_serve_Django-_Together,_they_form_a_more_flexible_and_robust_solution_than_Apache-">Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications. Gunicorn is a Python WSGI HTTP Server for UNIX that I use to serve Django. Together, they form a more flexible and robust solution than Apache.</h3>
+<h3 id="Upstart_is_a_great_utility_for_starting,_stopping,_and_supervising_tasks_as_if_they_were_services-">Upstart is a great utility for starting, stopping, and supervising tasks as if they were services.</h3>
+<p>Install</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> pip install gunicorn</div><div class="line"><span class="built_in">sudo</span> yum install nginx</div><div class="line"><span class="built_in">sudo</span> yum install upstart</div></pre></td></tr></table></figure>
+
+<p>Record the number of CPUs, use that next for the number of <code>worker_processes</code></p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lscpu | <span class="keyword">grep</span> <span class="string">'^CPU(s)'</span></div></pre></td></tr></table></figure>
+
+<p><code>vi /etc/nginx/nginx.conf</code></p>
+<figure class="highlight " nginx""=""><figcaption><span>"Insert the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="title">user</span>              nginx;</div><div class="line"><span class="title">worker_processes</span>  <span class="number">1</span>;</div></pre></td></tr></table></figure>
+
+<p>Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code></p>
+<figure class="highlight " nginx""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># virtual host using mix of IP-, name-, and port-based configuration</span></div><div class="line"><span class="comment"># from the django app, mysite, running on gunicorn</span></div><div class="line"></div><div class="line"><span class="title">server</span> {</div><div class="line">    <span class="title">listen</span>       <span class="number">80</span>;</div><div class="line"><span class="comment">#    listen       someip:8080;</span></div><div class="line">    <span class="title">server_name</span>  sitename.com;</div><div class="line"></div><div class="line">    <span class="title">access_log</span>  /var/log/nginx/mysite.log;</div><div class="line"></div><div class="line">    <span class="title">location</span> / {</div><div class="line">        <span class="title">proxy_set_header</span> Host <span class="variable">$http_host</span>;</div><div class="line">        <span class="title">proxy_set_header</span> X-Forwarded-Host <span class="variable">$server_name</span>;</div><div class="line">        <span class="title">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">        <span class="title">proxy_pass</span> <span class="url">http://127.0.0.1:8001</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">location</span> /media/ {</div><div class="line">        <span class="title">root</span> /home/username/mysite/media;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">location</span> /static/ {</div><div class="line">        <span class="title">root</span> /home/username/mysite/static;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">location</span> /admin/media/ {</div><div class="line">        <span class="comment"># this changes depending on your python version</span></div><div class="line">        <span class="title">root</span> /usr/lib/python2.<span class="number">6</span>/site-packages/django/contrib;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /home/username/mysite/static/50x.html;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Reload after configuration changes</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> nginx <span class="operator">-s</span> reload</div><div class="line"><span class="built_in">sudo</span> service nginx restart</div></pre></td></tr></table></figure>
+
+<p>Upstart Configuration<br><code>vi /etc/init/mysite.conf</code></p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">description <span class="string">"My website - mysite"</span></div><div class="line">start on runlevel [<span class="number">2345</span>]</div><div class="line">stop on runlevel [<span class="number">06</span>]</div><div class="line">respawn</div><div class="line">respawn limit <span class="number">10</span> <span class="number">5</span></div><div class="line"></div><div class="line">script</div><div class="line">                NAME=mysite</div><div class="line">                PORT=<span class="number">8001</span></div><div class="line">                NUM_WORKERS=<span class="number">2</span></div><div class="line">                TIMEOUT=<span class="number">120</span></div><div class="line">                USER=username</div><div class="line">                GROUP=wheel</div><div class="line">                LOGFILE=/var/<span class="keyword">log</span>/gunicorn/<span class="variable">$NAME</span>.<span class="keyword">log</span></div><div class="line">                LOGDIR=<span class="variable">$(</span><span class="keyword">dirname</span> <span class="variable">$LOGFILE</span>)</div><div class="line">                test -d <span class="variable">$LOGDIR</span> || mkdir -p <span class="variable">$LOGDIR</span></div><div class="line">                cd /home/<span class="variable">$USER</span>/<span class="variable">$NAME</span></div><div class="line">                <span class="keyword">exec</span> gunicorn_django \</div><div class="line">                         -w <span class="variable">$NUM_WORKERS</span> -t <span class="variable">$TIMEOUT</span> \</div><div class="line">                        --user=<span class="variable">$USER</span> --<span class="keyword">group</span>=<span class="variable">$GROUP</span> --<span class="keyword">log</span>-level=debug \</div><div class="line">                        --name=<span class="variable">$NAME</span> -b <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="variable">$PORT</span> \</div><div class="line">                        --<span class="keyword">log</span>-<span class="keyword">file</span>=<span class="variable">$LOGFILE</span> <span class="number">2</span>&gt;&gt;<span class="variable">$LOGFILE</span></div><div class="line">end script</div></pre></td></tr></table></figure>
+
+<p>Start the gunicorn/django service</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> start mysite</div></pre></td></tr></table></figure>
+
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2014 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

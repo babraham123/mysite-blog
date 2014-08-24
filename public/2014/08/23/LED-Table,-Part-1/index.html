@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LED Table, Part 1 | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="The idea
+A few months ago, I decided it was time to start a new side project. I really enjoyed using Arduinos in my senior thesis, so I decided that m">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">LED Table, Part 1</h1>
+  
+
+    <time datetime="2014-08-24T02:04:00.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="The_idea">The idea</h2>
+<p>A few months ago, I decided it was time to start a new side project. I really enjoyed using Arduinos in my senior thesis, so I decided that my next project would be centered around them. Just like before, I started searching websites like hackaday.com and instructables.com for inspiration. Eventually, I stumbled upon the idea of a LED enabled coffee table. A lot of people had tried it before with varying degrees of success. However, I believed that there were still serious engineering challenges that could be solved or simplified, as well as significant areas to reduce cost.</p>
+<p>Here is a pretty neat example by a mechanical engineering student in Wisconsin (<a href="http://imgur.com/a/CGV17" target="_blank" rel="external">images</a>). Underneath the glass top was about 100 individually addressable LEDs. Each LED could change color and brightness, and they were all connected to the same SPI bus. In addition, the builder had wired each light cell with an IR detector and emitter to sense touches and objects on the glass surface. The end result was a beautiful frosted glass table that could create an instant dance party. </p>
+<p>I started the project with an intense research and design phase. I immediately decided that touch control was a secondary goal of the project, due to the cost and complexity of wiring each individual light cell. Next came determining the dimensions, material, costs, suppliers, etc. </p>
+<p><img src="model.png" alt="Google Sketch Up" title="Google Sketch Up"></p>
+<h2 id="Software">Software</h2>
+<p>While waiting for all of my part to be delivered, I started working on the Arduino code. Controlling the lights was easy, using the very convenient FastSPI library. The next step was creating a website to control the light values (using the Ethernet shield to connect to the internet). A table is an inherently social object, so I knew I had to architect in multiuser support from the beginning. My first thought was use the Arduino as a webserver and create an API for the table. My actual server (cloud-hosting Linux server) would serve the UI, with the IP address of my Arduino hardcoded into the client code. The client could then query the status of each LED and set individual values. I succeeded in building a prototype but there were two crucial problems. First, I was running it off of my home network so I had to track my IP address and use port forwarding to expose my device to the Internet. Second, and more worrisome, the Arduino was incredibly slow. My solution to these challenges was to put a Raspberry Pi in front of the Arduino and to build out a socket.io server on my remote Linux instance. Socket.io wraps several technologies like long polling and websockets to allow the client and server to both push and pull commands. Now, my table is simply a client receiving commands from a set of other “user” clients. The Raspberry Pi (a headless Linux computer) manages the connection and forwards new commands to the Arduino over serial. </p>
+<p><img src="diagram.png" alt="System Architecture" title="System Architecture"></p>
+<p>One might wonder why I needed both an Arduino and a Raspberry Pi. I needed the Arduino because the RPi didn’t have a high enough clock speed for the WS2811 LED controllers. Also, the RPi was faster and cheaper than the Arduino WiFi shield. More generally, it was nice to have a dedicated component for each function, networking and hardware control, rather than one that could only sort of do both.</p>
+<p><img src="electronics.png" alt="Electronics" title="Electronics"></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2014 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>
