@@ -1,0 +1,29 @@
+description "node hexo server for my blog - myblog”
+start on runlevel [2345]
+stop on runlevel [06]
+
+expect fork
+respond
+respawn limit 10 5
+console output
+
+script
+        NAME=myblog
+        USER=babraham
+        GROUP=wheel
+        MAINFILE=blog_server.js
+        LOGFILE=/var/log/forever/$NAME.log
+        OUTFILE=/var/log/forever/$NAME_stdout.log
+        ERRFILE=/var/log/forever/$NAME_stderr.log
+        LOGDIR=$(dirname $LOGFILE)
+        test -d $LOGDIR || mkdir -p $LOGDIR
+        cd /home/$USER/$NAME
+
+        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE
+end script
+
+post-start script
+   echo "myblog started through forever + upstart”
+end script
+
+
