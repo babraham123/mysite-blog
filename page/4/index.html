@@ -1,0 +1,311 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Page 4 | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner">
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/How-to-setup-Django-+-mysql-+-Apache/">How to setup Django + mysql + Apache</a></h1>
+  
+
+    <time datetime="2014-08-23T18:21:36.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Below_is_a_step_by_step_account_of_how_to_set_up_a_django_(1-6)_web_application_on_a_CentOS_(6-4)_server,_running_Apache_(2-5)_and_python_(2-6,_2-7)">Below is a step by step account of how to set up a django (1.6) web application on a CentOS (6.4) server, running Apache (2.5) and python (2.6, 2.7)</h3>
+<p>1: <strong>Login as root and set up a new user</strong></p>
+<p>You probably want to eventually disable root login</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">ssh</span> <span class="tag">root</span><span class="at_rule">@<span class="keyword">[ip</span> address]</span></div></pre></td></tr></table></figure>
+
+<p>Create user</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="title">useradd</span> myuser</div><div class="line">passwd myuser</div></pre></td></tr></table></figure>
+
+<p>Add user to a sudo enabled group</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usermod <span class="operator">-a</span> -G wheel myuser</div></pre></td></tr></table></figure>
+
+<p>Allow the wheel group to use sudo by editing the shudders file<br><code>visudo -f /etc/sudoers</code></p>
+<figure class="highlight " asciidoc""=""><figcaption><span>"edit the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">## Allows people <span class="keyword">in</span> <span class="keyword">group</span> wheel <span class="keyword">to</span> run <span class="keyword">all</span> commands</div><div class="line"># %wheel        <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>)       <span class="keyword">ALL</span></div></pre></td></tr></table></figure>
+
+<p><code>exit</code></p>
+<p>2: <strong>Login without typing in your password (not strictly necessary)</strong> <a href="http://wiki.centos.org/HowTos/Network/SecuringSSH" target="_blank" rel="external">cite</a></p>
+<p>On your local machine, generate public/private key</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa</div></pre></td></tr></table></figure>
+
+<p>Set permissions on your private key</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">chmod</span> <span class="number">700</span> ~<span class="regexp">/.ssh</span></div><div class="line">chmod 600 ~/.ssh/id_rsa</div></pre></td></tr></table></figure>
+
+<p>Copy your public key onto remote server</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp ~<span class="regexp">/.ssh/id</span>_rsa.pub myuser@[ip address]<span class="symbol">:/home/myuser</span></div></pre></td></tr></table></figure>
+
+<p>On remote machine</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh myuser@[ip address]</div><div class="line"><span class="built_in">mkdir</span> ~/.ssh</div><div class="line">touch ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+
+<p>Add public key to authorized list</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">cat id_rsa.pub &gt;&gt;</span> ~<span class="regexp">/.ssh/authorized</span>_keys</span></div><div class="line">rm id_rsa.pub</div></pre></td></tr></table></figure>
+
+<p>Set permissions</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">chmod</span> <span class="number">700</span> ~<span class="regexp">/.ssh</span></div><div class="line">chmod 600 ~/.ssh/authorized_keys</div></pre></td></tr></table></figure>
+
+<p>3: <strong>Install necessary packages. Since this is for CentOS, we yum.</strong> <a href="http://itekblog.com/django-centos-6-4/" target="_blank" rel="external">cite</a></p>
+<p>Check centos version. These cmds are for centos 6.4</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cat</span> /etc/redhat-release</div></pre></td></tr></table></figure>
+
+<p><code>su</code></p>
+<p>Add the EPEL repositories to get Django</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cd /opt/</div><div class="line">wget http://mirrors.nl.eu.kernel.org/fedora-epel/6/i386/epel-<span class="operator"><span class="keyword">release</span>-<span class="number">6</span>-<span class="number">8.</span>noarch.rpm</span></div><div class="line">rpm -Uvh epel-<span class="keyword">release</span>-<span class="number">6</span>-<span class="number">8.</span>noarch.rpm</div><div class="line">rm epel-<span class="keyword">release</span>-<span class="number">6</span>-<span class="number">8.</span>noarch.rpm -f</div></pre></td></tr></table></figure>
+
+<p>Install packages</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">yum upgrade</div><div class="line">yum <span class="operator"><span class="keyword">install</span> python</span></div><div class="line">	(should be <span class="number">2.6</span><span class="number">.6</span>)</div><div class="line">yum <span class="keyword">install</span> sqlite</div><div class="line">yum <span class="keyword">install</span> mod_wsgi</div><div class="line">yum <span class="keyword">install</span> mysql mysql-<span class="keyword">server</span></div><div class="line"></div><div class="line">yum <span class="keyword">install</span> python-pip</div><div class="line">pip <span class="keyword">install</span> Django==<span class="number">1.6</span></div><div class="line">	(<span class="number">1.6</span> <span class="keyword">or</span> whatever <span class="keyword">version</span> you want)</div><div class="line">yum -y <span class="keyword">install</span> mysql-devel</div><div class="line">yum <span class="keyword">install</span> MySQL-python</div></pre></td></tr></table></figure>
+
+<p>Check to see if django works<br><code>python</code></p>
+<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"><span class="keyword">import</span> django</span></div><div class="line"><span class="built_in">print</span> django.get_version()</div><div class="line">quit()</div></pre></td></tr></table></figure>
+
+<p><code>exit</code></p>
+<p>4: <strong>Django</strong></p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">django-admin.<span class="keyword">py</span> startproject mysite</div><div class="line"><span class="keyword">cd</span> mysite</div></pre></td></tr></table></figure>
+
+<p>Add all of application specific code. For beginners, use this <a href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/" target="_blank" rel="external">tutorial</a></p>
+<p>5: <strong>Create a mysql database (or skip this and use mysqlite)</strong></p>
+<p><code>su</code></p>
+<p>Get mysql working, choose a password</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">chkconfig <span class="comment">--levels 235 mysqld on</span></div><div class="line">/etc/init.d/mysqld <span class="operator"><span class="keyword">start</span></span></div><div class="line">mysql_secure_installation</div></pre></td></tr></table></figure>
+
+<p>Create a new mysql user<br><code>mysql -u root -p</code></p>
+<figure class="highlight " sql""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="operator"><span class="keyword">create</span> <span class="keyword">database</span> mysitedb;</span></div><div class="line"><span class="operator"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> mysitedb.* <span class="keyword">To</span> <span class="string">'user'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'password'</span>;</span></div><div class="line">quit;</div></pre></td></tr></table></figure>
+
+<p><code>exit</code></p>
+<p>Add the details to your database to the django settings file<br><code>vi ~/mysite/mysite/settings.py</code></p>
+<figure class="highlight " python""=""><figcaption><span>"Add the following snippets"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ALLOWED_HOSTS = [<span class="string">'my.server.ip.address'</span>]</div><div class="line"></div><div class="line">DATABASES = {</div><div class="line">    <span class="string">'default'</span>: {</div><div class="line">        # Add <span class="string">'postgresql_psycopg2'</span>, <span class="string">'postgresql'</span>, <span class="string">'mysql'</span>, <span class="string">'sqlite3'</span> <span class="keyword">or</span> <span class="string">'oracle'</span>.                                        </div><div class="line">        <span class="string">'ENGINE'</span>: <span class="string">'django.db.backends.mysql'</span>,</div><div class="line">        <span class="string">'NAME'</span>: <span class="string">'mysitedb'</span>,</div><div class="line">        <span class="string">'USER'</span>: <span class="string">'mysiteuser'</span>,</div><div class="line">        <span class="string">'PASSWORD'</span>: <span class="string">'password'</span>,</div><div class="line">        <span class="string">'HOST'</span>: <span class="string">''</span>,</div><div class="line">        <span class="string">'PORT'</span>: <span class="string">''</span>,</div><div class="line">    }</div><div class="line">}</div><div class="line"></div><div class="line">TEMPLATE_DIRS = (</div><div class="line">    <span class="built_in">os</span>.path.join(BASE_DIR, <span class="string">"templates"</span>),</div><div class="line">)</div></pre></td></tr></table></figure>
+
+<p>Have python create mysql tables</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">cd</span> ~/mysite/</div><div class="line"><span class="keyword">python</span> manage.<span class="keyword">py</span> syncdb</div><div class="line"><span class="keyword">python</span> manage.<span class="keyword">py</span> sql [name of app]  # <span class="keyword">if</span> you have any apps</div><div class="line"><span class="keyword">python</span> manage.<span class="keyword">py</span> syncdb</div></pre></td></tr></table></figure>
+
+<p>6: <strong>Set up mod_wsgi (A python library for Apache). For testing, you can skip this and just use the development server that comes with django (instead of Apache).</strong></p>
+<p>Development server</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">python</span> manage.<span class="keyword">py</span> runserver</div></pre></td></tr></table></figure>
+
+<p><code>su</code></p>
+<p>Configure apache module for django<br><code>vi /etc/httpd/conf.d/wsgi.conf</code></p>
+<figure class="highlight " apache""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword"><span class="common">LoadModule</span></span> wsgi_module modules/mod_wsgi.so</div><div class="line"></div><div class="line"><span class="tag">&lt;VirtualHost *:80&gt;</span></div><div class="line">  <span class="keyword"><span class="common">ServerName</span></span> www.mywebsite.com</div><div class="line">  <span class="keyword">ServerAlias</span> mywebsite.com</div><div class="line">  <span class="keyword">ServerAdmin</span> webmaster@mywebsite.com</div><div class="line"></div><div class="line">  <span class="keyword">Alias</span> /static/admin/ /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin/</div><div class="line">  <span class="keyword">Alias</span> /robots.txt /home/username/mysite/static/robots.txt</div><div class="line">  <span class="keyword">Alias</span> /favicon.ico /home/username/mysite/static/favicon.ico</div><div class="line">  <span class="keyword">AliasMatch</span> ^/([^/]*\.css) /home/username/mysite/static/styles/<span class="number">$1</span></div><div class="line"></div><div class="line">  <span class="keyword">Alias</span> /media/ /home/username/mysite/media/</div><div class="line">  <span class="tag">&lt;Directory /home/username/mysite/media&gt;</span></div><div class="line">    <span class="keyword"><span class="common">Order</span></span> deny,allow</div><div class="line">    <span class="keyword"><span class="common">Allow</span></span> from <span class="literal">all</span></div><div class="line">  <span class="tag">&lt;/Directory&gt;</span></div><div class="line"></div><div class="line">  <span class="keyword">Alias</span> /static/ /home/username/mysite/static/</div><div class="line">  <span class="tag">&lt;Directory /home/username/mysite/static&gt;</span></div><div class="line">    <span class="keyword"><span class="common">Order</span></span> deny,allow</div><div class="line">    <span class="keyword"><span class="common">Allow</span></span> from <span class="literal">all</span></div><div class="line">  <span class="tag">&lt;/Directory&gt;</span></div><div class="line"></div><div class="line"><span class="comment">#  WSGIDaemonProcess mywebsite.com python-path=/home/username/mysite:/usr/lib/python2.6/</span></div><div class="line"><span class="comment">#  WSGIProcessGroup mywebsite.com</span></div><div class="line"></div><div class="line">  <span class="keyword">WSGIScriptAlias</span> / /home/username/mysite/mysite/wsgi.py</div><div class="line"></div><div class="line">  <span class="tag">&lt;Directory /home/username/mysite/mysite&gt;</span></div><div class="line">    <span class="tag">&lt;Files wsgi.py&gt;</span></div><div class="line"><span class="comment">#      WSGIProcessGroup mywebsite.com</span></div><div class="line">      <span class="keyword"><span class="common">Order</span></span> allow,deny</div><div class="line">      <span class="keyword"><span class="common">Allow</span></span> from <span class="literal">all</span></div><div class="line">    <span class="tag">&lt;/Files&gt;</span></div><div class="line">  <span class="tag">&lt;/Directory&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure>
+
+<p>Restart after changing config files</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apachectl restart</div><div class="line"># <span class="built_in">or</span>, <span class="keyword">if</span> that fails <span class="keyword">try</span> this <span class="keyword">version</span></div><div class="line">/sbin/service httpd restart</div></pre></td></tr></table></figure>
+
+<p>other commands </p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">apachectl <span class="operator"><span class="keyword">start</span></span></div><div class="line">apachectl <span class="keyword">stop</span></div><div class="line">apachectl <span class="keyword">status</span></div><div class="line">httpd -v</div></pre></td></tr></table></figure>
+
+<p>Testing: <code>vi /var/www/html/index.html</code></p>
+<p>7: <strong>Troubleshooting 403 permission denied errors. After every change, restart apache and check website.</strong></p>
+<p>Set user permissions for project files<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)</p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">su</div><div class="line"><span class="keyword">chmod</span> <span class="number">755</span> /home</div><div class="line"><span class="keyword">chmod</span> <span class="number">755</span> /home/username</div><div class="line"><span class="keyword">chmod</span> <span class="number">755</span> /home/username/mysite -R</div><div class="line"><span class="keyword">chmod</span> <span class="number">644</span> /home/username/mysite/wsgi.py</div><div class="line"><span class="keyword">exit</span></div></pre></td></tr></table></figure>
+
+<p>Add project folder to system path<br><code>vi mysite/wsgi.py</code></p>
+<figure class="highlight " python""=""><figcaption><span>"Add snippet to the top of the file"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sys</div><div class="line">sys.path.<span class="keyword">append</span>(<span class="string">'/home/username'</span>)</div><div class="line">sys.path.<span class="keyword">append</span>(<span class="string">'/home/username/mysite'</span>)</div></pre></td></tr></table></figure>
+
+<p><a href="http://blog.endpoint.com/2010/02/selinux-httpd-modwsgi-26-rhel-centos-5.html" target="_blank" rel="external">Problems with SELinux</a></p>
+<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">su</div><div class="line">setsebool -P httpd_can_network_connect <span class="function_start"><span class="keyword">on</span></span></div><div class="line">setsebool -P httpd_enable_homedirs <span class="function_start"><span class="keyword">on</span></span></div><div class="line">setsebool -P httpd_can_sendmail <span class="function_start"><span class="keyword">on</span></span></div><div class="line">restorecon -vR /etc/httpd</div><div class="line"><span class="keyword">exit</span></div></pre></td></tr></table></figure>
+
+<p><a href="http://code.google.com/p/modwsgi/wiki/WhereToGetHelp?tm=6#Conference_Presentations" target="_blank" rel="external">Config problems on CentOS</a></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Intro-to-Web-Programming/">Intro to Web Programming</a></h1>
+  
+
+    <time datetime="2014-08-23T18:07:47.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p>A friend of mine recently told me that she was interested in programming, but didn’t know where to start. She had already taken an intro course, so she knew how to use if statements, for loops, etc. Still, she felt a large chasm between what she knew and professional code. I sent her a few notes:</p>
+<hr>
+<p>Dear Q,</p>
+<p>Code academy is a great resource. When I’m starting something new, I usually do a few tutorials, and then try to complete a small project.</p>
+<p>For beginners everyone recommends python. The syntax is very straightforward and it has all the basics. Get really comfortable with one language before you branch out.</p>
+<p>Lately, I’ve been interested in web development. I like it a lot, because you can see and interact with the end product. If you already have some experience, building a website is a really fun project.</p>
+<p>Here’s the path I took over the course of many months:</p>
+<ul>
+<li>Learn html (basics)</li>
+<li>Learn styling with twitter bootstrap</li>
+<li>Start using a python framework (bottle.py or web.py)</li>
+<li>Learn a professional grade framework (django or zend)<pre><code>   (zend uses php <span class="keyword">and</span> <span class="keyword">is</span> a bit outdated, <span class="keyword">but</span> <span class="keyword">its</span> also <span class="keyword">the</span> most common)
+</code></pre></li>
+<li>Host your site on a remote server (probably Amazon EC2)</li>
+</ul>
+<p>Advanced</p>
+<ul>
+<li>Learn Javascript</li>
+<li>Learn JQuery</li>
+<li>Add dynamic elements to your site<pre><code>   (This <span class="keyword">is</span> the hardest part, what people will pay <span class="built_in">real</span> money <span class="keyword">for</span>)
+</code></pre></li>
+</ul>
+<p>Hope that helps!</p>
+<p>Cheers,<br>Bereket</p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/22/Thesis-Design/">Thesis Design</a></h1>
+  
+
+    <time datetime="2014-08-22T04:51:29.000Z">
+  <span class="day">22</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p>During the spring of my senior year, I </p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
+
+<nav id="pagenavi">
+  
+    <a href="/blog/page/3/" class="alignleft prev">Prev</a>
+  
+  
+    <a href="/blog/page/5/" class="alignright next">Next</a>
+  
+  <div class="clearfix"></div>
+</nav></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2014 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

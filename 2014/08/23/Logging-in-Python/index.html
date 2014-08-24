@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Logging in Python | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Often times you want to log errors and debugging information in a log file. This is especially helpful for scripts that take a long time to run or run">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Logging in Python</h1>
+  
+
+    <time datetime="2014-08-23T21:04:58.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p>Often times you want to log errors and debugging information in a log file. This is especially helpful for scripts that take a long time to run or run on a reoccurring basis. Below are some helpful hints and code snippets on how to do this in Python.</p>
+<p>Include this code at the top of your script as a global variable. You can also use the same code to log info from helper scripts and imported libraries.</p>
+<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">import</span> logging</div><div class="line"><span class="variable">logger =</span> logging.getLogger(__name__)</div></pre></td></tr></table></figure>
+
+<p>In your script’s main function (the one that executes all of your code), you need to set the basic configuration params of the logger. This should only be called once. Set the name of the log file, formatting, etc. I like to call the log file the name of my main script, using sys.argv (remember to import sys)</p>
+<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> <span class="variable">__name__ =</span>= <span class="string">"__main__"</span>:</div><div class="line">    <span class="variable">logname =</span> sys.argv[<span class="number">0</span>][:-<span class="number">3</span>] + <span class="string">".log"</span></div><div class="line">    logging.basicConfig(<span class="variable">level=</span>logging.DEBUG, <span class="variable">filename=</span>logname, <span class="variable">format=</span>'%(asctime)s %(levelname)s: %(name)s: %(message)s')</div></pre></td></tr></table></figure>
+
+<p>Finally, you can log messages to your log file in any .py file where you have initialized the logger object. </p>
+<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></div><div class="line">    logger.debug(<span class="string">"Hello, world"</span>)</div></pre></td></tr></table></figure>
+
+<p><strong>Log levels</strong> are a clever way to organize your log files. Typically you want a lot more information while debugging than while in production. Thus, you can send very description, long messages as <code>DEBUG</code> messages and shorter ones as <code>INFO</code> messages. Then you specify which log level you want when or set the configuration params. This determines which messages actually get written to your log file. The cool thing is that the log level X also gives you all of the log levels below X. So a log level of <code>WARNING</code> writes <code>WARNING</code>, <code>ERROR</code>, and <code>CRITICAL</code> messages to the log file. </p>
+<ul>
+<li><code>DEBUG</code>: Detailed information, typically of interest only when diagnosing problems.</li>
+<li><code>INFO</code>: Confirmation that things are working as expected.</li>
+<li><code>WARNING</code>: An indication that something unexpected happened, or indicative of some problem in the near future (e.g. ‘disk space low’). The software is still working as expected.</li>
+<li><code>ERROR</code>: Due to a more serious problem, the software has not been able to perform some function.</li>
+<li><code>CRITICAL</code>: A serious error, indicating that the program itself may be unable to continue running.</li>
+</ul>
+<p><strong>How to catch Exceptions</strong><br>Certain commands are particularly error prone, like saving model objects in AnxPy. In that case, you want to catch and handle any exceptions, in order to prevent them from automatically terminating your program. You can catch all exceptions or only certain kinds. Here’s an example:</p>
+<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">    <span class="comment"># risky code</span></div><div class="line">    my_creative.save()</div><div class="line">except <span class="keyword">Exception</span> <span class="keyword">as</span> e:</div><div class="line">    <span class="comment"># failure</span></div><div class="line">    message = <span class="string">"Creative "</span> + str(my_creative.id) + <span class="string">" failed on save."</span></div><div class="line">    logger.info(message)</div><div class="line">    logger.<span class="keyword">exception</span>(e)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="comment"># success!</span></div><div class="line">    message = <span class="string">"Creative "</span> + str(my_creative.id) + <span class="string">" was saved."</span></div><div class="line">    logger.info(message)</div></pre></td></tr></table></figure>
+
+<p><strong>Advanced: Log all exceptions</strong><br>Insert this code at the top of your main script in order to log all exceptions, regardless of type or where they occur. They will still interrupt your program, but now they are also sent to your log file. Also, you can now decide whether or not to write to the standard error stream, stderr (useful for cron jobs). </p>
+<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging, sys</div><div class="line">logger = logging.getLogger(__name__)</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">stderr_override</span><span class="params">(typeE, valueE, tracebackE)</span>:</span></div><div class="line">    typeE = <span class="string">"\n  Error Type: "</span> + str(typeE)</div><div class="line">    valueE = <span class="string">"\n  Error Value: "</span> + str(valueE)</div><div class="line">    tracebackE = <span class="string">"\n  Traceback: "</span> + <span class="string">"    "</span>.join(traceback.format_tb(tracebackE)) + <span class="string">"\n"</span></div><div class="line">    messageE = typeE + valueE + tracebackE</div><div class="line"> </div><div class="line">    logger.exception(messageE)</div><div class="line">    <span class="keyword">print</span> &gt;&gt; sys.stderr, messageE</div><div class="line"> </div><div class="line"><span class="comment"># send any uncaught errors to the logs</span></div><div class="line">sys.excepthook = stderr_override</div></pre></td></tr></table></figure>
+
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2014 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>
