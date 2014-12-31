@@ -1,4 +1,5 @@
 title: Hello World
+date: 2014-06-23 21:27:53
 ---
 Welcome to [Hexo](http://hexo.io/)! This is my very first post. Check [documentation](http://hexo.io/docs/) for more info.
 
