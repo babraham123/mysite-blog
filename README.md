@@ -5,3 +5,8 @@ mysite-blog
 
 node_modules/hexo/bin/hexo = hexo for locally installs
 
+
+Install
+sudo npm install -g hexo
+Gen and deploy
+hexo deploy -g
