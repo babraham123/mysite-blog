@@ -1,0 +1,188 @@
+sudo npm install -g hexo
+
+hexo init myblog
+cd myblog
+sudo npm install
+
+git clone git://github.com/tommy351/hexo-theme-phase.git themes/phase
+	(download the phase theme)
+vi _config.yaml
+	(configure your git repo, pagination options, port #)
+——————————————————
+# Hexo Configuration
+## Docs: http://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: Greasy Keys
+subtitle: hardware meets software
+description:
+author: Bereket Abraham
+email: babraham42@gmail.com
+language: en-US
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://bereketabraham.com/blog
+root: /blog/
+permalink: :year/:month/:day/:title/
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+permalink_defaults:
+
+# Directory
+source_dir: source
+public_dir: public
+
+# Writing
+new_post_name: :year-:month-:day-:title.md
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+highlight:
+  enable: true
+  line_number: true
+  tab_replace:
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+
+# Archives
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 2
+category: 2
+tag: 2
+
+# Server
+## Hexo uses Connect as a server
+## You can customize the logger format as defined in
+## http://www.senchalabs.org/connect/logger.html
+port: 8008
+server_ip: localhost
+logger: false
+logger_format: dev
+
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: MMM D YYYY
+time_format: H:mm:ss
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 3
+pagination_dir: page
+
+# Disqus
+disqus_shortname:
+
+# Extensions
+## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
+## Themes: https://github.com/hexojs/hexo/wiki/Themes
+theme: phase
+exclude_generator:
+
+# Deployment
+## Docs: http://hexo.io/docs/deployment.html
+deploy:
+  type: github
+  repo: https://github.com/babraham123/mysite-blog.git
+————————————————————————
+
+hexo new post "Title" 
+
+vi source/_posts/Title.md
+————————————————————————
+# Post title
+## subtitle
+
+**by Bereket Abraham**
+
+[Visit GitHub!](www.github.com)
+
+``` "bash" "setup commands"
+code snippet
+rm -rf /home/
+```
+Filler paragraph.
+
+![](test.png)
+
+————————————————————————
+
+hexo generate --deploy
+
+hexo server -p 5000
+	(test Connect server)
+vi blog_server.js
+———————————————————
+require('hexo').init({command: 'server'});
+————————————————————
+vi package.json
+	(add hexo to the package config)
+————————————————————
+{
+  "name": "hexo-site",
+  "version": "2.8.2",
+  "private": true,
+  "dependencies": {
+    “hexo”: "2.8.2",
+    "hexo-renderer-ejs": "*",
+    "hexo-renderer-stylus": "*",
+    "hexo-renderer-marked": "*"
+  }
+}
+————————————————————
+sudo npm install
+
+(to deploy to production, commit changes and push to remote server. Then serve generated files using Connect + forever + upstart)
+vi /etc/init/myblog.conf
+	(create new upstart manager)
+——————————————————— 
+description "node hexo server for my blog - myblog”
+start on runlevel [2345]
+stop on runlevel [06]
+
+expect fork
+respond
+respawn limit 10 5
+console output
+
+script
+        NAME=myblog
+        USER=username
+        GROUP=wheel
+        MAINFILE=blog_server.js
+        LOGFILE=/var/log/forever/$NAME.log
+        OUTFILE=/var/log/forever/$NAME_stdout.log
+        ERRFILE=/var/log/forever/$NAME_stderr.log
+        LOGDIR=$(dirname $LOGFILE)
+        test -d $LOGDIR || mkdir -p $LOGDIR
+        cd /home/$USER/$NAME
+
+        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE
+end script
+
+post-start script
+   echo "myblog started through forever + upstart”
+end script
+——————————————————— 
+sudo start myblog
+
+sudo ln -s /lib/init/upstart-job /etc/init.d/myblog
+	(add new system service)
+update-rc.d myblog defaults
+	(Make it starts at system boot)
+
+
