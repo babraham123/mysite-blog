@@ -22,9 +22,9 @@
   <header id="header" class="inner"><nav>
   <ul>
     
-      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Home</a></li>
     
-      <li><a href="/archives">Archives</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
     
   </ul>
 </nav></header>
@@ -56,14 +56,11 @@
     
       <p>Often times you want to log errors and debugging information in a log file. This is especially helpful for scripts that take a long time to run or run on a reoccurring basis. Below are some helpful hints and code snippets on how to do this in Python.</p>
 <p>Include this code at the top of your script as a global variable. You can also use the same code to log info from helper scripts and imported libraries.</p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">import</span> logging</div><div class="line"><span class="variable">logger =</span> logging.getLogger(__name__)</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import logging&#10;logger = logging.getLogger(__name__)</span><br></pre></td></tr></table></figure>
 <p>In your script’s main function (the one that executes all of your code), you need to set the basic configuration params of the logger. This should only be called once. Set the name of the log file, formatting, etc. I like to call the log file the name of my main script, using sys.argv (remember to import sys)</p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> <span class="variable">__name__ =</span>= <span class="string">"__main__"</span>:</div><div class="line">    <span class="variable">logname =</span> sys.argv[<span class="number">0</span>][:-<span class="number">3</span>] + <span class="string">".log"</span></div><div class="line">    logging.basicConfig(<span class="variable">level=</span>logging.DEBUG, <span class="variable">filename=</span>logname, <span class="variable">format=</span>'%(asctime)s %(levelname)s: %(name)s: %(message)s')</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &#34;__main__&#34;:&#10;    logname = sys.argv[0][:-3] + &#34;.log&#34;&#10;    logging.basicConfig(level=logging.DEBUG, filename=logname, format=&#39;%(asctime)s %(levelname)s: %(name)s: %(message)s&#39;)</span><br></pre></td></tr></table></figure>
 <p>Finally, you can log messages to your log file in any .py file where you have initialized the logger object. </p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></div><div class="line">    logger.debug(<span class="string">"Hello, world"</span>)</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">def foo():&#10;    logger.debug(&#34;Hello, world&#34;)</span><br></pre></td></tr></table></figure>
 <p><strong>Log levels</strong> are a clever way to organize your log files. Typically you want a lot more information while debugging than while in production. Thus, you can send very description, long messages as <code>DEBUG</code> messages and shorter ones as <code>INFO</code> messages. Then you specify which log level you want when or set the configuration params. This determines which messages actually get written to your log file. The cool thing is that the log level X also gives you all of the log levels below X. So a log level of <code>WARNING</code> writes <code>WARNING</code>, <code>ERROR</code>, and <code>CRITICAL</code> messages to the log file. </p>
 <ul>
 <li><code>DEBUG</code>: Detailed information, typically of interest only when diagnosing problems.</li>
@@ -73,11 +70,9 @@
 <li><code>CRITICAL</code>: A serious error, indicating that the program itself may be unable to continue running.</li>
 </ul>
 <p><strong>How to catch Exceptions</strong><br>Certain commands are particularly error prone, like saving model objects in AnxPy. In that case, you want to catch and handle any exceptions, in order to prevent them from automatically terminating your program. You can catch all exceptions or only certain kinds. Here’s an example:</p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">    <span class="comment"># risky code</span></div><div class="line">    my_creative.save()</div><div class="line">except <span class="keyword">Exception</span> <span class="keyword">as</span> e:</div><div class="line">    <span class="comment"># failure</span></div><div class="line">    message = <span class="string">"Creative "</span> + str(my_creative.id) + <span class="string">" failed on save."</span></div><div class="line">    logger.info(message)</div><div class="line">    logger.<span class="keyword">exception</span>(e)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="comment"># success!</span></div><div class="line">    message = <span class="string">"Creative "</span> + str(my_creative.id) + <span class="string">" was saved."</span></div><div class="line">    logger.info(message)</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">try:&#10;    # risky code&#10;    my_creative.save()&#10;except Exception as e:&#10;    # failure&#10;    message = &#34;Creative &#34; + str(my_creative.id) + &#34; failed on save.&#34;&#10;    logger.info(message)&#10;    logger.exception(e)&#10;else:&#10;    # success!&#10;    message = &#34;Creative &#34; + str(my_creative.id) + &#34; was saved.&#34;&#10;    logger.info(message)</span><br></pre></td></tr></table></figure>
 <p><strong>Advanced: Log all exceptions</strong><br>Insert this code at the top of your main script in order to log all exceptions, regardless of type or where they occur. They will still interrupt your program, but now they are also sent to your log file. Also, you can now decide whether or not to write to the standard error stream, stderr (useful for cron jobs). </p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging, sys</div><div class="line">logger = logging.getLogger(__name__)</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">stderr_override</span><span class="params">(typeE, valueE, tracebackE)</span>:</span></div><div class="line">    typeE = <span class="string">"\n  Error Type: "</span> + str(typeE)</div><div class="line">    valueE = <span class="string">"\n  Error Value: "</span> + str(valueE)</div><div class="line">    tracebackE = <span class="string">"\n  Traceback: "</span> + <span class="string">"    "</span>.join(traceback.format_tb(tracebackE)) + <span class="string">"\n"</span></div><div class="line">    messageE = typeE + valueE + tracebackE</div><div class="line"> </div><div class="line">    logger.exception(messageE)</div><div class="line">    <span class="keyword">print</span> &gt;&gt; sys.stderr, messageE</div><div class="line"> </div><div class="line"><span class="comment"># send any uncaught errors to the logs</span></div><div class="line">sys.excepthook = stderr_override</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import logging, sys&#10;logger = logging.getLogger(__name__)&#10; &#10;def stderr_override(typeE, valueE, tracebackE):&#10;    typeE = &#34;\n  Error Type: &#34; + str(typeE)&#10;    valueE = &#34;\n  Error Value: &#34; + str(valueE)&#10;    tracebackE = &#34;\n  Traceback: &#34; + &#34;    &#34;.join(traceback.format_tb(tracebackE)) + &#34;\n&#34;&#10;    messageE = typeE + valueE + tracebackE&#10; &#10;    logger.exception(messageE)&#10;    print &#62;&#62; sys.stderr, messageE&#10; &#10;# send any uncaught errors to the logs&#10;sys.excepthook = stderr_override</span><br></pre></td></tr></table></figure>
 
     
     
@@ -99,7 +94,7 @@
 </div>
 <p>
   
-  &copy; 2014 Bereket Abraham
+  &copy; 2015 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>

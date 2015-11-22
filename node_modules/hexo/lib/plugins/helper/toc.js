@@ -1,30 +1,29 @@
-var _ = require('lodash'),
-  cheerio = require('cheerio'),
-  util = require('../../util');
+'use strict';
 
-module.exports = function(str, options){
-  options = _.extend({
-    class: 'toc',
-    list_number: true
-  }, options);
+var cheerio;
 
-  var $ = cheerio.load(str),
-    headings = $('h1, h2, h3, h4, h5, h6');
+function tocHelper(str, options){
+  options = options || {};
+
+  if (!cheerio) cheerio = require('cheerio');
+
+  var $ = cheerio.load(str);
+  var headings = $('h1, h2, h3, h4, h5, h6');
 
   if (!headings.length) return '';
 
-  var className = options.class,
-    listNumber = options.list_number,
-    result = '<ol class="' + options.class + '">',
-    lastNumber = [0, 0, 0, 0, 0, 0],
-    firstLevel = 0,
-    lastLevel = 0,
-    i = 0;
+  var className = options.class || 'toc';
+  var listNumber = options.hasOwnProperty('list_number') ? options.list_number : true;
+  var result = '<ol class="' + className + '">';
+  var lastNumber = [0, 0, 0, 0, 0, 0];
+  var firstLevel = 0;
+  var lastLevel = 0;
+  var i = 0;
 
   headings.each(function(){
-    var level = +this.name[1],
-      id = $(this).attr('id'),
-      text = $(this).text();
+    var level = +this.name[1];
+    var id = $(this).attr('id');
+    var text = $(this).text();
 
     lastNumber[level - 1]++;
 
@@ -69,4 +68,6 @@ module.exports = function(str, options){
   }
 
   return result;
-};
+}
+
+module.exports = tocHelper;

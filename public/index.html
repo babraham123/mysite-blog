@@ -20,13 +20,129 @@
   <header id="header" class="inner"><nav>
   <ul>
     
-      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Home</a></li>
     
-      <li><a href="/archives">Archives</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
     
   </ul>
 </nav></header>
   <div id="content" class="inner">
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2015/11/02/Raspberry-Pi-WiFi-Network/">Raspberry Pi WiFi Network</a></h1>
+  
+
+    <time datetime="2015-11-02T05:32:58.000Z">
+  <span class="day">2</span><span class="month">Nov</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h1 id="rasp-wifi">rasp-wifi</h1><h3 id="Title:_Diagnostics_and_Webserving_on_the_Raspberry_Pi">Title: Diagnostics and Webserving on the Raspberry Pi</h3><p>How to setup a Raspberry Pi as an access point for its own wireless network. The discussion below is a review on some of the ways to interact with this device.</p>
+<h3 id="Talk_Outline">Talk Outline</h3><h4 id="Raspberry_Pi">Raspberry Pi</h4><ul>
+<li>A credit card sized computer that’s significantly cheaper than most of its rivals (~$35)</li>
+<li>Applications: media center, cloud server, smart TV, game emulator, robotics brain, cheap educational tool, home automation, etc</li>
+<li>Great comumunity, including numerous blogs, tutorials and libraries</li>
+</ul>
+<h4 id="The_Problem">The Problem</h4><ul>
+<li>How to easily and wirelessly interact with the Pi. Even for non-interactive projects, you need to diagnose issues, check system health. </li>
+<li>Need a UI of some kind for an embedded, headless PC</li>
+</ul>
+<h4 id="Potential_Solutions_-_Physical_Link">Potential Solutions - Physical Link</h4><ul>
+<li>External monitor<ul>
+<li>requires expensive screen, requires Pi enter display mode</li>
+<li>cost defeats the purpose of buying a low-cost Pi</li>
+</ul>
+</li>
+<li>Ethernet<ul>
+<li>HTTP allows us to use the web browser to display information, receive input. A great cross-device platform</li>
+<li>cumbersome cords, bad for outdoor applications</li>
+</ul>
+</li>
+<li>WiFi<ul>
+<li>looks better but has signal range issues. Difficult to configure</li>
+</ul>
+</li>
+<li>Bluetooth<ul>
+<li>Requires a dedicated client-side application in order to receive and display signals</li>
+</ul>
+</li>
+</ul>
+<h4 id="Potential_Solutions_-_Network">Potential Solutions - Network</h4><ul>
+<li>SSH onto the Pi<ul>
+<li>Requires specialized knowledge to operate, not user friendly</li>
+</ul>
+</li>
+<li>Pi connects to remote server<ul>
+<li>Hosting costs</li>
+<li>Security concerns</li>
+</ul>
+</li>
+<li>Pi becomes a web server that user connects over home network<ul>
+<li>User must somehow detect local ip address (too hard for enduser)</li>
+<li>Or open port on home network and use dynamic ip stuff (not secure)</li>
+</ul>
+</li>
+</ul>
+<h4 id="My_Solution">My Solution</h4><p>Create your own local network with the Raspberry Pi as the router, DNS, and web server.</p>
+<h4 id="Advantages">Advantages</h4><ul>
+<li>Instant wireless connectivity wherever you go</li>
+<li>If internet access becomes available, you can choose to forward remote requests</li>
+<li>No security problems due to limited range</li>
+<li>Leverages web browser as a cross device platform</li>
+<li>Can create custom domain names, network name</li>
+<li>Fairly simple for enduser</li>
+<li>Same method used by Chromecast to configure its wifi connection</li>
+</ul>
+<h4 id="Technologies_used_in_demo">Technologies used in demo</h4><ul>
+<li>hostapd: wifi device mode (access point), network security (WPA2)</li>
+<li>dnsmasq: DHCP and DNS</li>
+<li>nginx: webserving</li>
+<li>socket.io: 2 way communication</li>
+<li>init scripts: automatically stop and start on reboot</li>
+</ul>
+<h4 id="Few_projects_I’ve_built">Few projects I’ve built</h4><ul>
+<li>Interactive LED table: individually addressable, multicolor LEDs</li>
+<li>Smartphone enabled TV remote: chromecast and IR commands</li>
+<li>Weather station: collection of environmental sensors</li>
+</ul>
+<h4 id="Future_Improvements">Future Improvements</h4><ul>
+<li>Try a different WiFi mode. For example, ad hoc or mesh networks (multiple masters)</li>
+<li>Try using Multicast DNS to broadcast domain name over home network</li>
+<li>Try to access webpages over bluetooth<ul>
+<li>Forward http requests over bluetooth PAN</li>
+<li><a href="http://notes.pitfall.org/ip-over-bluetooth-to-a-raspberry-pi.html" target="_blank" rel="external">Bluetooth PAN</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
   <article class="post">
   
     <div class="gallery">
@@ -53,8 +169,11 @@
   </header>
   <div class="entry-content">
     
-      <h1 id="Decoupled_web_applications_and_simplified_deployment">Decoupled web applications and simplified deployment</h1>
-<p>Recently, </p>
+      <h1 id="Decoupling_web_applications">Decoupling web applications</h1><p>This article outlines a few best practices for developing multiple, independent web applications within the same website or even the same webpage. During my experiments, I used python and nodejs for my server-side software. My research into web apps was motived by my recent expansion of my personal website. In order to showcase my web development skills, I added on a section called Labs, where I prototype interesting web applications. Below are some of the lessons I learned.</p>
+<h4 id="Lesson_1,_code_management">Lesson 1, code management</h4><p>Initially, I stored the code for my web apps in the same git repository as the code for my umbrella website, a django app. However, because they functioned independently, I often wanted to develop on and branch each web app differently. So I split the code into multiple repositories and reintroduced them as submodules into the main repo.</p>
+<h4 id="Lesson_2,_libraries_and_dependencies">Lesson 2, libraries and dependencies</h4><p>Personally, I like to save as many dependencies as I can locally in the git repo. That way on a fresh machine I can just git clone and be ready to go. For node that simply means removing <code>\node_modules</code> from the <code>.gitignore</code> file. For python you have to use the <code>virtualenv</code> library.</p>
+<h4 id="Lesson_3,_routing">Lesson 3, routing</h4><p>So I usually run each app on a random unused port on my server. However, keeping track of the port numbers in my main website was turning out to be a pain. So, I installed nginx and used it to reverse proxy to all of my apps, using human readable routes. For example, <code>/app1:80</code> would map to <code>/localhost:8080</code>. I also used it to serve all of my status content.</p>
+<h4 id="Lesson_4,_deployment">Lesson 4, deployment</h4><p>There are a lot of great tools for automated deployment, like Puppet and Jenkins. However, that was total overkill for my website. Instead, I settled for a simple bash script that installs the right config files and restarts the upstart job. I use upstart to run my server as a system service and restart on boot. Each app has its own start script and upstart job.</p>
 
     
     
@@ -95,13 +214,11 @@
   <div class="entry-content">
     
       <p><em>Please read part 1 for the full story.</em></p>
-<h2 id="Hardware">Hardware</h2>
-<p>The table construction was definitely the most fun part. The steps were basically measure, cut, sand, stain, screw together, stain, stain, and stain. I made a few mistakes but they were easily covered up using glue and wood filler. I used pegs to join the boards and help hide most of the screws. </p>
+<h2 id="Hardware">Hardware</h2><p>The table construction was definitely the most fun part. The steps were basically measure, cut, sand, stain, screw together, stain, stain, and stain. I made a few mistakes but they were easily covered up using glue and wood filler. I used pegs to join the boards and help hide most of the screws. </p>
 <p><img src="table.png" alt="Table Construction" title="Table Construction"></p>
 <p>Next came the grid to house each individual LED. The grid is needed to prevent different colors from blending together and to help reflect the light upward. Finding the right material was actually pretty hard. I tried thin plywood but it was impossible to cut the precise notches. Judging from the pictures, the Wisconsin student used laser cut balsa wood, but that was too expensive for me. I ended up taking stiff cardboard and cutting out shapes with a box cutter (with plywood sides for support). A professional build would probably use injection-molded plastic, which becomes very cheap at high volumes. Another neat thing I did was make the grid housing removable, so that I can hang it on the wall as a standalone art piece. </p>
 <p><img src="grid.png" alt="Grid" title="Grid"></p>
-<h2 id="Software,_part_2">Software, part 2</h2>
-<p>The next major component was the website’s user interface. The first thing I wrote was a simple textbox for testing. I knew the real UI would probably need a color picker and an animation of the table. The first iteration used the canvas element in HTML5 to draw shapes java-style. However, it was really hard to set the event listeners so I switched to a great JavaScript library called FabricJS. It lets you create shapes as objects, so you can then naturally add listeners, set values, and create custom methods.<br>The next iteration will use the length of time a cell was pressed to help set the color / brightness. </p>
+<h2 id="Software,_part_2">Software, part 2</h2><p>The next major component was the website’s user interface. The first thing I wrote was a simple textbox for testing. I knew the real UI would probably need a color picker and an animation of the table. The first iteration used the canvas element in HTML5 to draw shapes java-style. However, it was really hard to set the event listeners so I switched to a great JavaScript library called FabricJS. It lets you create shapes as objects, so you can then naturally add listeners, set values, and create custom methods.<br>The next iteration will use the length of time a cell was pressed to help set the color / brightness. </p>
 <p><img src="ui.png" alt="LED UI" title="LED UI"></p>
 <p>Extensions</p>
 <p>Now that the table is mostly functional I can start thinking about extensions and add-ons. The most popular (and complicated) extension would be touch interactivity on the glass surface. Most DIY solutions involve building a grid of IR emitters and receivers. The chief advantages are simplicity and the ability to detect inanimate objects. However, I feel that they are outweighed by many disadvantages; for example, IR sensors can be washed out by house lights and the sun, wiring each emitter-receiver pair is difficult and error prone, and individual sensors results in very low resolution. Luckily, the popularity of touch screen devices has created a number of capacitive touch technologies to choose from. One solution was to place very cheap capacitive touch switches under the glass by each light cell. The switches are robust but face the same wiring and resolution problems as the IR detectors. Another solution was to use a special capacitive touch controller to monitor the entire surface at once (up to a certain size). The controller measures slight variations in the electrical field to pinpoint the exact location of a finger touch.</p>
@@ -119,60 +236,11 @@
   
 </article>
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <header>
-    
-  
-    <h1 class="title"><a href="/blog/2014/08/23/LED-Table,-Part-1/">LED Table, Part 1</a></h1>
-  
-
-    <time datetime="2014-08-24T02:04:00.000Z">
-  <span class="day">23</span><span class="month">Aug</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <h2 id="The_idea">The idea</h2>
-<p>A few months ago, I decided it was time to start a new side project. I really enjoyed using Arduinos in my senior thesis, so I decided that my next project would be centered around them. Just like before, I started searching websites like hackaday.com and instructables.com for inspiration. Eventually, I stumbled upon the idea of a LED enabled coffee table. A lot of people had tried it before with varying degrees of success. However, I believed that there were still serious engineering challenges that could be solved or simplified, as well as significant areas to reduce cost.</p>
-<p>Here is a pretty neat example by a mechanical engineering student in Wisconsin (<a href="http://imgur.com/a/CGV17" target="_blank" rel="external">images</a>). Underneath the glass top was about 100 individually addressable LEDs. Each LED could change color and brightness, and they were all connected to the same SPI bus. In addition, the builder had wired each light cell with an IR detector and emitter to sense touches and objects on the glass surface. The end result was a beautiful frosted glass table that could create an instant dance party. </p>
-<p>I started the project with an intense research and design phase. I immediately decided that touch control was a secondary goal of the project, due to the cost and complexity of wiring each individual light cell. Next came determining the dimensions, material, costs, suppliers, etc. </p>
-<p><img src="model.png" alt="Google Sketch Up" title="Google Sketch Up"></p>
-<h2 id="Software">Software</h2>
-<p>While waiting for all of my part to be delivered, I started working on the Arduino code. Controlling the lights was easy, using the very convenient FastSPI library. The next step was creating a website to control the light values (using the Ethernet shield to connect to the internet). A table is an inherently social object, so I knew I had to architect in multiuser support from the beginning. My first thought was use the Arduino as a webserver and create an API for the table. My actual server (cloud-hosting Linux server) would serve the UI, with the IP address of my Arduino hardcoded into the client code. The client could then query the status of each LED and set individual values. I succeeded in building a prototype but there were two crucial problems. First, I was running it off of my home network so I had to track my IP address and use port forwarding to expose my device to the Internet. Second, and more worrisome, the Arduino was incredibly slow. My solution to these challenges was to put a Raspberry Pi in front of the Arduino and to build out a socket.io server on my remote Linux instance. Socket.io wraps several technologies like long polling and websockets to allow the client and server to both push and pull commands. Now, my table is simply a client receiving commands from a set of other “user” clients. The Raspberry Pi (a headless Linux computer) manages the connection and forwards new commands to the Arduino over serial. </p>
-<p><img src="diagram.png" alt="System Architecture" title="System Architecture"></p>
-<p>One might wonder why I needed both an Arduino and a Raspberry Pi. I needed the Arduino because the RPi didn’t have a high enough clock speed for the WS2811 LED controllers. Also, the RPi was faster and cheaper than the Arduino WiFi shield. More generally, it was nice to have a dedicated component for each function, networking and hardware control, rather than one that could only sort of do both.</p>
-<p><img src="electronics.png" alt="Electronics" title="Electronics"></p>
-
-    
-    
-    <footer class="meta">
-      
-      
-      
-    </footer>
-    
-  </div>
-  
-</article>
-
 
 <nav id="pagenavi">
   
   
-    <a href="/blog/page/2/" class="alignright next">Next</a>
+    <a href="/blog/page/2/" class="alignright next">下一頁</a>
   
   <div class="clearfix"></div>
 </nav></div>
@@ -185,7 +253,7 @@
 </div>
 <p>
   
-  &copy; 2014 Bereket Abraham
+  &copy; 2015 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>

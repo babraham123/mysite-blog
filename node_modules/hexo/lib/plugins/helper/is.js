@@ -1,7 +1,9 @@
-var util = require('../../util'),
-  escape = util.escape;
+'use strict';
 
-exports.is_current = function(path, strict){
+function isCurrentHelper(path, strict){
+  /* jshint validthis: true */
+  path = path || '';
+
   if (strict){
     if (path[path.length - 1] === '/') path += 'index.html';
 
@@ -11,61 +13,72 @@ exports.is_current = function(path, strict){
 
     return this.path.substring(0, path.length) === path;
   }
-};
+}
 
-exports.is_home = function(){
-  var config = this.config || hexo.config,
-    r = new RegExp('^' + escape.regex(config.pagination_dir) + '\\/\\d+\\/');
+function isHomeHelper(){
+  /* jshint validthis: true */
+  return Boolean(this.page.__index);
+}
 
-  return this.path === '' || r.test(this.path);
-};
+function isPostHelper(){
+  /* jshint validthis: true */
+  return Boolean(this.page.__post);
+}
 
-exports.is_post = function(){
-  var config = this.config || hexo.config;
+function isPageHelper(){
+  /* jshint validthis: true */
+  return Boolean(this.page.__page);
+}
 
-  var rUrl = escape.regex(config.permalink)
-    .replace(':id', '\\d+')
-    .replace(':category', '(\\w+\\/?)+')
-    .replace(':year', '\\d{4}')
-    .replace(/:(month|day)/g, '\\d{2}')
-    .replace(':title', '[^\\/]+');
+function isArchiveHelper(){
+  /* jshint validthis: true */
+  return Boolean(this.page.archive);
+}
 
-  var r = new RegExp('^' + rUrl);
+function isYearHelper(year){
+  /* jshint validthis: true */
+  var page = this.page;
+  if (!page.archive) return false;
 
-  return r.test(this.path);
-};
+  if (year){
+    return page.year === year;
+  } else {
+    return Boolean(page.year);
+  }
+}
 
-exports.is_archive = function(){
-  var config = this.config || hexo.config,
-    r = new RegExp('^' + escape.regex(config.archive_dir) + '\\/');
+function isMonthHelper(year, month){
+  /* jshint validthis: true */
+  var page = this.page;
+  if (!page.archive) return false;
 
-  return r.test(this.path);
-};
+  if (year){
+    if (month){
+      return page.year === year && page.month === month;
+    } else {
+      return page.month === year;
+    }
+  } else {
+    return Boolean(page.year && page.month);
+  }
+}
 
-exports.is_year = function(){
-  var config = this.config || hexo.config,
-    r = new RegExp('^' + escape.regex(config.archive_dir) + '\\/\\d{4}\\/');
+function isCategoryHelper(){
+  /* jshint validthis: true */
+  return Boolean(this.page.category);
+}
 
-  return r.test(this.path);
-};
+function isTagHelper(){
+  /* jshint validthis: true */
+  return Boolean(this.page.tag);
+}
 
-exports.is_month = function(){
-  var config = this.config || hexo.config,
-    r = new RegExp('^' + escape.regex(config.archive_dir) + '\\/\\d{4}\\/\\d{2}\\/');
-
-  return r.test(this.path);
-};
-
-exports.is_category = function(){
-  var config = this.config || hexo.config,
-    r = new RegExp('^' + escape.regex(config.category_dir) + '\\/');
-
-  return r.test(this.path);
-};
-
-exports.is_tag = function(){
-  var config = this.config || hexo.config,
-    r = new RegExp('^' + escape.regex(config.tag_dir) + '\\/');
-
-  return r.test(this.path);
-};
+exports.current = isCurrentHelper;
+exports.home = isHomeHelper;
+exports.post = isPostHelper;
+exports.page = isPageHelper;
+exports.archive = isArchiveHelper;
+exports.year = isYearHelper;
+exports.month = isMonthHelper;
+exports.category = isCategoryHelper;
+exports.tag = isTagHelper;

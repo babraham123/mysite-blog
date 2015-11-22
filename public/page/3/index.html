@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 3 | Greasy Keys</title>
+  <title>第 3 頁 | Greasy Keys</title>
   <meta name="author" content="Bereket Abraham">
 
   
@@ -20,13 +20,65 @@
   <header id="header" class="inner"><nav>
   <ul>
     
-      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Home</a></li>
     
-      <li><a href="/archives">Archives</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
     
   </ul>
 </nav></header>
   <div id="content" class="inner">
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Raspberry-Pi-Setup/">Raspberry Pi Setup</a></h1>
+  
+
+    <time datetime="2014-08-23T21:41:18.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><strong>How to setup a Raspberry Pi</strong> (assuming you’ve already bought the supporting components, like a power supply, wiki dongle, and ethernet cable.)</p>
+<p>Plug SD card into your computer to format</p>
+<p>Open disk utility and erase card. Set the name and the format to “MS-DOS (FAT)”<br><figure class="highlight"><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diskutil list&#10;# find your card, example /dev/disk38&#10;diskutil unmountdisk /dev/disk38</span><br></pre></td></tr></table></figure></p>
+<p>Download your pi OS image and cd to folder. <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Download</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if=2014-06-20-wheezy-raspbian.img of=/dev/disk38 bs=2m&#10;# (flash OS image onto card, if=source, of=target, bs=size)</span><br></pre></td></tr></table></figure></p>
+<p>Plug in peripherals, like keyboard, ethernet cable, and power</p>
+<p>In order to locate your pi on the wifi network, install mmap, run it, and ssh into your pi<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig (get local ip address)&#10;nmap -sn 192.168.1.0/24&#10;ssh pi@192.168.1.88&#10;# username= pi&#10;# password= raspberry</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config&#10;(set password, OS size, locale, )&#10;username= pi&#10;password= typical</span><br></pre></td></tr></table></figure>
+<p>Set up environment<br><figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update&#10;sudo apt-get upgrade&#10;sudo apt-get autoremove</span><br></pre></td></tr></table></figure></p>
+<p>Wifi dongle setup<br><figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.bak&#10;sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure></p>
+<p>Change your ssid/password<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev&#10;update_config=1&#10;&#10;network=&#123;&#10;        ssid=&#34;your_ssid&#34;&#10;        psk=&#34;your_pass&#34;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Reboot and log back in<br><code>sudo reboot</code><br><figure class="highlight"><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sn 192.168.1.0/24&#10;# find ip address again&#10;ssh pi@192.168.1.56</span><br></pre></td></tr></table></figure></p>
+<p><strong>Extra:</strong><br>for GUI, after you plugin a monitor<br><code>startx</code> </p>
+<p>Shutdown command<br><code>sudo shutdown -h now</code></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
   <article class="post">
   
     <div class="gallery">
@@ -53,29 +105,13 @@
   </header>
   <div class="entry-content">
     
-      <h3 id="Nginx_is_a_high-performance_HTTP_server_and_reverse_proxy-_I_use_it_to_serve_static_files_and_route_incoming_requests_among_multiple_web_applications-_Gunicorn_is_a_Python_WSGI_HTTP_Server_for_UNIX_that_I_use_to_serve_Django-_Together,_they_form_a_more_flexible_and_robust_solution_than_Apache-">Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications. Gunicorn is a Python WSGI HTTP Server for UNIX that I use to serve Django. Together, they form a more flexible and robust solution than Apache.</h3>
-<h3 id="Upstart_is_a_great_utility_for_starting,_stopping,_and_supervising_tasks_as_if_they_were_services-">Upstart is a great utility for starting, stopping, and supervising tasks as if they were services.</h3>
-<p>Install</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> pip install gunicorn</div><div class="line"><span class="built_in">sudo</span> yum install nginx</div><div class="line"><span class="built_in">sudo</span> yum install upstart</div></pre></td></tr></table></figure>
-
-<p>Record the number of CPUs, use that next for the number of <code>worker_processes</code></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lscpu | <span class="keyword">grep</span> <span class="string">'^CPU(s)'</span></div></pre></td></tr></table></figure>
-
-<p><code>vi /etc/nginx/nginx.conf</code></p>
-<figure class="highlight " nginx""=""><figcaption><span>"Insert the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="title">user</span>              nginx;</div><div class="line"><span class="title">worker_processes</span>  <span class="number">1</span>;</div></pre></td></tr></table></figure>
-
-<p>Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code></p>
-<figure class="highlight " nginx""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># virtual host using mix of IP-, name-, and port-based configuration</span></div><div class="line"><span class="comment"># from the django app, mysite, running on gunicorn</span></div><div class="line"></div><div class="line"><span class="title">server</span> {</div><div class="line">    <span class="title">listen</span>       <span class="number">80</span>;</div><div class="line"><span class="comment">#    listen       someip:8080;</span></div><div class="line">    <span class="title">server_name</span>  sitename.com;</div><div class="line"></div><div class="line">    <span class="title">access_log</span>  /var/log/nginx/mysite.log;</div><div class="line"></div><div class="line">    <span class="title">location</span> / {</div><div class="line">        <span class="title">proxy_set_header</span> Host <span class="variable">$http_host</span>;</div><div class="line">        <span class="title">proxy_set_header</span> X-Forwarded-Host <span class="variable">$server_name</span>;</div><div class="line">        <span class="title">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">        <span class="title">proxy_pass</span> <span class="url">http://127.0.0.1:8001</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">location</span> /media/ {</div><div class="line">        <span class="title">root</span> /home/username/mysite/media;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">location</span> /static/ {</div><div class="line">        <span class="title">root</span> /home/username/mysite/static;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">location</span> /admin/media/ {</div><div class="line">        <span class="comment"># this changes depending on your python version</span></div><div class="line">        <span class="title">root</span> /usr/lib/python2.<span class="number">6</span>/site-packages/django/contrib;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="title">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /home/username/mysite/static/50x.html;</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>Reload after configuration changes</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> nginx <span class="operator">-s</span> reload</div><div class="line"><span class="built_in">sudo</span> service nginx restart</div></pre></td></tr></table></figure>
-
-<p>Upstart Configuration<br><code>vi /etc/init/mysite.conf</code></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">description <span class="string">"My website - mysite"</span></div><div class="line">start on runlevel [<span class="number">2345</span>]</div><div class="line">stop on runlevel [<span class="number">06</span>]</div><div class="line">respawn</div><div class="line">respawn limit <span class="number">10</span> <span class="number">5</span></div><div class="line"></div><div class="line">script</div><div class="line">                NAME=mysite</div><div class="line">                PORT=<span class="number">8001</span></div><div class="line">                NUM_WORKERS=<span class="number">2</span></div><div class="line">                TIMEOUT=<span class="number">120</span></div><div class="line">                USER=username</div><div class="line">                GROUP=wheel</div><div class="line">                LOGFILE=/var/<span class="keyword">log</span>/gunicorn/<span class="variable">$NAME</span>.<span class="keyword">log</span></div><div class="line">                LOGDIR=<span class="variable">$(</span><span class="keyword">dirname</span> <span class="variable">$LOGFILE</span>)</div><div class="line">                test -d <span class="variable">$LOGDIR</span> || mkdir -p <span class="variable">$LOGDIR</span></div><div class="line">                cd /home/<span class="variable">$USER</span>/<span class="variable">$NAME</span></div><div class="line">                <span class="keyword">exec</span> gunicorn_django \</div><div class="line">                         -w <span class="variable">$NUM_WORKERS</span> -t <span class="variable">$TIMEOUT</span> \</div><div class="line">                        --user=<span class="variable">$USER</span> --<span class="keyword">group</span>=<span class="variable">$GROUP</span> --<span class="keyword">log</span>-level=debug \</div><div class="line">                        --name=<span class="variable">$NAME</span> -b <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="variable">$PORT</span> \</div><div class="line">                        --<span class="keyword">log</span>-<span class="keyword">file</span>=<span class="variable">$LOGFILE</span> <span class="number">2</span>&gt;&gt;<span class="variable">$LOGFILE</span></div><div class="line">end script</div></pre></td></tr></table></figure>
-
-<p>Start the gunicorn/django service</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> start mysite</div></pre></td></tr></table></figure>
-
+      <h3 id="Nginx_is_a_high-performance_HTTP_server_and_reverse_proxy-_I_use_it_to_serve_static_files_and_route_incoming_requests_among_multiple_web_applications-_Gunicorn_is_a_Python_WSGI_HTTP_Server_for_UNIX_that_I_use_to_serve_Django-_Together,_they_form_a_more_flexible_and_robust_solution_than_Apache-">Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications. Gunicorn is a Python WSGI HTTP Server for UNIX that I use to serve Django. Together, they form a more flexible and robust solution than Apache.</h3><h3 id="Upstart_is_a_great_utility_for_starting,_stopping,_and_supervising_tasks_as_if_they_were_services-">Upstart is a great utility for starting, stopping, and supervising tasks as if they were services.</h3><p>Install<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install gunicorn&#10;sudo yum install nginx&#10;sudo yum install upstart</span><br></pre></td></tr></table></figure></p>
+<p>Record the number of CPUs, use that next for the number of <code>worker_processes</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lscpu | grep &#39;^CPU(s)&#39;</span><br></pre></td></tr></table></figure></p>
+<p><code>vi /etc/nginx/nginx.conf</code><br><figure class="highlight"><figcaption><span>"Insert the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user              nginx;&#10;worker_processes  1;</span><br></pre></td></tr></table></figure></p>
+<p>Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual host using mix of IP-, name-, and port-based configuration&#10;# from the django app, mysite, running on gunicorn&#10;&#10;server &#123;&#10;    listen       80;&#10;#    listen       someip:8080;&#10;    server_name  sitename.com;&#10;&#10;    access_log  /var/log/nginx/mysite.log;&#10;&#10;    location / &#123;&#10;        proxy_set_header Host $http_host;&#10;        proxy_set_header X-Forwarded-Host $server_name;&#10;        proxy_set_header X-Real-IP $remote_addr;&#10;        proxy_pass http://127.0.0.1:8001;&#10;    &#125;&#10;&#10;    location /media/ &#123;&#10;        root /home/username/mysite/media;&#10;    &#125;&#10;&#10;    location /static/ &#123;&#10;        root /home/username/mysite/static;&#10;    &#125;&#10;&#10;    location /admin/media/ &#123;&#10;        # this changes depending on your python version&#10;        root /usr/lib/python2.6/site-packages/django/contrib;&#10;    &#125;&#10;&#10;    error_page   500 502 503 504  /home/username/mysite/static/50x.html;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Reload after configuration changes<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Upstart Configuration<br><code>vi /etc/init/mysite.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;My website - mysite&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;respawn&#10;respawn limit 10 5&#10;&#10;script&#10;                NAME=mysite&#10;                PORT=8001&#10;                NUM_WORKERS=2&#10;                TIMEOUT=120&#10;                USER=username&#10;                GROUP=wheel&#10;                LOGFILE=/var/log/gunicorn/$NAME.log&#10;                LOGDIR=$(dirname $LOGFILE)&#10;                test -d $LOGDIR || mkdir -p $LOGDIR&#10;                cd /home/$USER/$NAME&#10;                exec gunicorn_django \&#10;                         -w $NUM_WORKERS -t $TIMEOUT \&#10;                        --user=$USER --group=$GROUP --log-level=debug \&#10;                        --name=$NAME -b 127.0.0.1:$PORT \&#10;                        --log-file=$LOGFILE 2&#62;&#62;$LOGFILE&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the gunicorn/django service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysite</span><br></pre></td></tr></table></figure></p>
 
     
     
@@ -117,71 +153,7 @@
     
       <p>Pandoc is a requirement for Nbconvert, a useful iPython library that allows you to convert ipython notebooks into various formats. The formats include pdf, html, even latex. Pandoc is the core document converter library and is written in Haskell, so it’s a bit difficult to install. </p>
 <p><a href="http://ipython.org/ipython-doc/rel-1.0.0/interactive/nbconvert.html" target="_blank" rel="external">Docs</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">sudo yum <span class="operator"><span class="keyword">install</span> gcc</span></div><div class="line">sudo wget http://sherkin.justhub.org/el6/RPMS/x86_64/justhub-<span class="keyword">release</span>-<span class="number">2.0</span>-<span class="number">4.0</span>.el6.x86_64.rpm</div><div class="line">sudo rpm -ivh <span class="comment">--replacepkgs justhub-release-2.0-4.0.el6.x86_64.rpm</span></div><div class="line">sudo yum <span class="keyword">install</span> haskell</div><div class="line">export PATH=/usr/hs/<span class="keyword">bin</span>:~/.cabal/<span class="keyword">bin</span>:$PATH</div><div class="line">cabal <span class="keyword">update</span></div><div class="line">cabal <span class="keyword">install</span> cabal-dev</div><div class="line">cabal <span class="keyword">install</span> pandoc</div></pre></td></tr></table></figure>
-
-
-    
-    
-    <footer class="meta">
-      
-      
-      
-    </footer>
-    
-  </div>
-  
-</article>
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <header>
-    
-  
-    <h1 class="title"><a href="/blog/2014/08/23/Logging-in-Python/">Logging in Python</a></h1>
-  
-
-    <time datetime="2014-08-23T21:04:58.000Z">
-  <span class="day">23</span><span class="month">Aug</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <p>Often times you want to log errors and debugging information in a log file. This is especially helpful for scripts that take a long time to run or run on a reoccurring basis. Below are some helpful hints and code snippets on how to do this in Python.</p>
-<p>Include this code at the top of your script as a global variable. You can also use the same code to log info from helper scripts and imported libraries.</p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">import</span> logging</div><div class="line"><span class="variable">logger =</span> logging.getLogger(__name__)</div></pre></td></tr></table></figure>
-
-<p>In your script’s main function (the one that executes all of your code), you need to set the basic configuration params of the logger. This should only be called once. Set the name of the log file, formatting, etc. I like to call the log file the name of my main script, using sys.argv (remember to import sys)</p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> <span class="variable">__name__ =</span>= <span class="string">"__main__"</span>:</div><div class="line">    <span class="variable">logname =</span> sys.argv[<span class="number">0</span>][:-<span class="number">3</span>] + <span class="string">".log"</span></div><div class="line">    logging.basicConfig(<span class="variable">level=</span>logging.DEBUG, <span class="variable">filename=</span>logname, <span class="variable">format=</span>'%(asctime)s %(levelname)s: %(name)s: %(message)s')</div></pre></td></tr></table></figure>
-
-<p>Finally, you can log messages to your log file in any .py file where you have initialized the logger object. </p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">()</span>:</span></div><div class="line">    logger.debug(<span class="string">"Hello, world"</span>)</div></pre></td></tr></table></figure>
-
-<p><strong>Log levels</strong> are a clever way to organize your log files. Typically you want a lot more information while debugging than while in production. Thus, you can send very description, long messages as <code>DEBUG</code> messages and shorter ones as <code>INFO</code> messages. Then you specify which log level you want when or set the configuration params. This determines which messages actually get written to your log file. The cool thing is that the log level X also gives you all of the log levels below X. So a log level of <code>WARNING</code> writes <code>WARNING</code>, <code>ERROR</code>, and <code>CRITICAL</code> messages to the log file. </p>
-<ul>
-<li><code>DEBUG</code>: Detailed information, typically of interest only when diagnosing problems.</li>
-<li><code>INFO</code>: Confirmation that things are working as expected.</li>
-<li><code>WARNING</code>: An indication that something unexpected happened, or indicative of some problem in the near future (e.g. ‘disk space low’). The software is still working as expected.</li>
-<li><code>ERROR</code>: Due to a more serious problem, the software has not been able to perform some function.</li>
-<li><code>CRITICAL</code>: A serious error, indicating that the program itself may be unable to continue running.</li>
-</ul>
-<p><strong>How to catch Exceptions</strong><br>Certain commands are particularly error prone, like saving model objects in AnxPy. In that case, you want to catch and handle any exceptions, in order to prevent them from automatically terminating your program. You can catch all exceptions or only certain kinds. Here’s an example:</p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">    <span class="comment"># risky code</span></div><div class="line">    my_creative.save()</div><div class="line">except <span class="keyword">Exception</span> <span class="keyword">as</span> e:</div><div class="line">    <span class="comment"># failure</span></div><div class="line">    message = <span class="string">"Creative "</span> + str(my_creative.id) + <span class="string">" failed on save."</span></div><div class="line">    logger.info(message)</div><div class="line">    logger.<span class="keyword">exception</span>(e)</div><div class="line"><span class="keyword">else</span>:</div><div class="line">    <span class="comment"># success!</span></div><div class="line">    message = <span class="string">"Creative "</span> + str(my_creative.id) + <span class="string">" was saved."</span></div><div class="line">    logger.info(message)</div></pre></td></tr></table></figure>
-
-<p><strong>Advanced: Log all exceptions</strong><br>Insert this code at the top of your main script in order to log all exceptions, regardless of type or where they occur. They will still interrupt your program, but now they are also sent to your log file. Also, you can now decide whether or not to write to the standard error stream, stderr (useful for cron jobs). </p>
-<figure class="highlight " python""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging, sys</div><div class="line">logger = logging.getLogger(__name__)</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">stderr_override</span><span class="params">(typeE, valueE, tracebackE)</span>:</span></div><div class="line">    typeE = <span class="string">"\n  Error Type: "</span> + str(typeE)</div><div class="line">    valueE = <span class="string">"\n  Error Value: "</span> + str(valueE)</div><div class="line">    tracebackE = <span class="string">"\n  Traceback: "</span> + <span class="string">"    "</span>.join(traceback.format_tb(tracebackE)) + <span class="string">"\n"</span></div><div class="line">    messageE = typeE + valueE + tracebackE</div><div class="line"> </div><div class="line">    logger.exception(messageE)</div><div class="line">    <span class="keyword">print</span> &gt;&gt; sys.stderr, messageE</div><div class="line"> </div><div class="line"><span class="comment"># send any uncaught errors to the logs</span></div><div class="line">sys.excepthook = stderr_override</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install gcc&#10;sudo wget http://sherkin.justhub.org/el6/RPMS/x86_64/justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo rpm -ivh --replacepkgs justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo yum install haskell&#10;export PATH=/usr/hs/bin:~/.cabal/bin:$PATH&#10;cabal update&#10;cabal install cabal-dev&#10;cabal install pandoc</span><br></pre></td></tr></table></figure>
 
     
     
@@ -198,10 +170,10 @@
 
 <nav id="pagenavi">
   
-    <a href="/blog/page/2/" class="alignleft prev">Prev</a>
+    <a href="/blog/page/2/" class="alignleft prev">上一頁</a>
   
   
-    <a href="/blog/page/4/" class="alignright next">Next</a>
+    <a href="/blog/page/4/" class="alignright next">下一頁</a>
   
   <div class="clearfix"></div>
 </nav></div>
@@ -214,7 +186,7 @@
 </div>
 <p>
   
-  &copy; 2014 Bereket Abraham
+  &copy; 2015 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>

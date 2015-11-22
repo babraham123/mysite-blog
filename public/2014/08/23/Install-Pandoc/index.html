@@ -22,9 +22,9 @@
   <header id="header" class="inner"><nav>
   <ul>
     
-      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Home</a></li>
     
-      <li><a href="/archives">Archives</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
     
   </ul>
 </nav></header>
@@ -56,8 +56,7 @@
     
       <p>Pandoc is a requirement for Nbconvert, a useful iPython library that allows you to convert ipython notebooks into various formats. The formats include pdf, html, even latex. Pandoc is the core document converter library and is written in Haskell, so it’s a bit difficult to install. </p>
 <p><a href="http://ipython.org/ipython-doc/rel-1.0.0/interactive/nbconvert.html" target="_blank" rel="external">Docs</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">sudo yum <span class="operator"><span class="keyword">install</span> gcc</span></div><div class="line">sudo wget http://sherkin.justhub.org/el6/RPMS/x86_64/justhub-<span class="keyword">release</span>-<span class="number">2.0</span>-<span class="number">4.0</span>.el6.x86_64.rpm</div><div class="line">sudo rpm -ivh <span class="comment">--replacepkgs justhub-release-2.0-4.0.el6.x86_64.rpm</span></div><div class="line">sudo yum <span class="keyword">install</span> haskell</div><div class="line">export PATH=/usr/hs/<span class="keyword">bin</span>:~/.cabal/<span class="keyword">bin</span>:$PATH</div><div class="line">cabal <span class="keyword">update</span></div><div class="line">cabal <span class="keyword">install</span> cabal-dev</div><div class="line">cabal <span class="keyword">install</span> pandoc</div></pre></td></tr></table></figure>
-
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install gcc&#10;sudo wget http://sherkin.justhub.org/el6/RPMS/x86_64/justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo rpm -ivh --replacepkgs justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo yum install haskell&#10;export PATH=/usr/hs/bin:~/.cabal/bin:$PATH&#10;cabal update&#10;cabal install cabal-dev&#10;cabal install pandoc</span><br></pre></td></tr></table></figure>
 
     
     
@@ -79,7 +78,7 @@
 </div>
 <p>
   
-  &copy; 2014 Bereket Abraham
+  &copy; 2015 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>

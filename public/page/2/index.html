@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Page 2 | Greasy Keys</title>
+  <title>第 2 頁 | Greasy Keys</title>
   <meta name="author" content="Bereket Abraham">
 
   
@@ -20,13 +20,60 @@
   <header id="header" class="inner"><nav>
   <ul>
     
-      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Home</a></li>
     
-      <li><a href="/archives">Archives</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
     
   </ul>
 </nav></header>
   <div id="content" class="inner">
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/LED-Table,-Part-1/">LED Table, Part 1</a></h1>
+  
+
+    <time datetime="2014-08-24T02:04:00.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="The_idea">The idea</h2><p>A few months ago, I decided it was time to start a new side project. I really enjoyed using Arduinos in my senior thesis, so I decided that my next project would be centered around them. Just like before, I started searching websites like hackaday.com and instructables.com for inspiration. Eventually, I stumbled upon the idea of a LED enabled coffee table. A lot of people had tried it before with varying degrees of success. However, I believed that there were still serious engineering challenges that could be solved or simplified, as well as significant areas to reduce cost.</p>
+<p>Here is a pretty neat example by a mechanical engineering student in Wisconsin (<a href="http://imgur.com/a/CGV17" target="_blank" rel="external">images</a>). Underneath the glass top was about 100 individually addressable LEDs. Each LED could change color and brightness, and they were all connected to the same SPI bus. In addition, the builder had wired each light cell with an IR detector and emitter to sense touches and objects on the glass surface. The end result was a beautiful frosted glass table that could create an instant dance party. </p>
+<p>I started the project with an intense research and design phase. I immediately decided that touch control was a secondary goal of the project, due to the cost and complexity of wiring each individual light cell. Next came determining the dimensions, material, costs, suppliers, etc. </p>
+<p><img src="model.png" alt="Google Sketch Up" title="Google Sketch Up"></p>
+<h2 id="Software">Software</h2><p>While waiting for all of my part to be delivered, I started working on the Arduino code. Controlling the lights was easy, using the very convenient FastSPI library. The next step was creating a website to control the light values (using the Ethernet shield to connect to the internet). A table is an inherently social object, so I knew I had to architect in multiuser support from the beginning. My first thought was use the Arduino as a webserver and create an API for the table. My actual server (cloud-hosting Linux server) would serve the UI, with the IP address of my Arduino hardcoded into the client code. The client could then query the status of each LED and set individual values. I succeeded in building a prototype but there were two crucial problems. First, I was running it off of my home network so I had to track my IP address and use port forwarding to expose my device to the Internet. Second, and more worrisome, the Arduino was incredibly slow. My solution to these challenges was to put a Raspberry Pi in front of the Arduino and to build out a socket.io server on my remote Linux instance. Socket.io wraps several technologies like long polling and websockets to allow the client and server to both push and pull commands. Now, my table is simply a client receiving commands from a set of other “user” clients. The Raspberry Pi (a headless Linux computer) manages the connection and forwards new commands to the Arduino over serial. </p>
+<p><img src="diagram.png" alt="System Architecture" title="System Architecture"></p>
+<p>One might wonder why I needed both an Arduino and a Raspberry Pi. I needed the Arduino because the RPi didn’t have a high enough clock speed for the WS2811 LED controllers. Also, the RPi was faster and cheaper than the Arduino WiFi shield. More generally, it was nice to have a dedicated component for each function, networking and hardware control, rather than one that could only sort of do both.</p>
+<p><img src="electronics.png" alt="Electronics" title="Electronics"></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
   <article class="post">
   
     <div class="gallery">
@@ -53,56 +100,23 @@
   </header>
   <div class="entry-content">
     
-      <h3 id="Hexo_is_a_Node_module_for_generating_html_files_from_Markdown,_and_is_great_for_making_blog_posts-_The_best_method_seems_to_be_writing/generating_your_posts_on_a_local_computer,_then_deploying_your_project_to_the_remote_server-">Hexo is a Node module for generating html files from Markdown, and is great for making blog posts. The best method seems to be writing/generating your posts on a local computer, then deploying your project to the remote server.</h3>
-<p>Installs</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> yum install npm</div><div class="line"><span class="built_in">sudo</span> npm install -g hexo</div></pre></td></tr></table></figure>
-
-<p>Start a new Hexo project</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hexo init myblog</div><div class="line"><span class="built_in">cd</span> myblog</div><div class="line"><span class="built_in">sudo</span> npm install</div></pre></td></tr></table></figure>
-
-<p>Download the phase theme (optional)</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/tommy351/hexo-theme-phase.git themes/phase</div></pre></td></tr></table></figure>
-
-<p>Configure your git repo, port #, etc<br><code>vi _config.yaml</code></p>
-<figure class="highlight " asciidoc""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># Hexo Configuration</span></div><div class="line"><span class="preprocessor">## Docs: http://hexo.io/docs/configuration.html</span></div><div class="line"><span class="preprocessor">## Source: https://github.com/hexojs/hexo/</span></div><div class="line"></div><div class="line"><span class="preprocessor"># Site</span></div><div class="line"><span class="label">title:</span> Greasy Keys</div><div class="line"><span class="label">subtitle:</span> hardware meets software</div><div class="line"><span class="label">description:</span></div><div class="line"><span class="label">author:</span> Bereket Abraham</div><div class="line"><span class="label">email:</span> babraham42@gmail.com</div><div class="line"><span class="label">language:</span> en-US</div><div class="line"></div><div class="line"><span class="preprocessor"># URL</span></div><div class="line"><span class="preprocessor">## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'</span></div><div class="line"><span class="label">url:</span> http://bereketabraham.com/blog</div><div class="line"><span class="label">root:</span> /blog/</div><div class="line"><span class="label">permalink:</span> :year/:month/:day/:title/</div><div class="line"><span class="label">tag_dir:</span> tags</div><div class="line"><span class="label">archive_dir:</span> archives</div><div class="line"><span class="label">category_dir:</span> categories</div><div class="line"><span class="label">code_dir:</span> downloads/code</div><div class="line"><span class="label">permalink_defaults:</span></div><div class="line"></div><div class="line"><span class="preprocessor"># Directory</span></div><div class="line"><span class="label">source_dir:</span> source</div><div class="line"><span class="label">public_dir:</span> public</div><div class="line"></div><div class="line"><span class="preprocessor"># Writing</span></div><div class="line"><span class="label">new_post_name:</span> :year-:month-:day-:title.md</div><div class="line"><span class="label">default_layout:</span> post</div><div class="line"><span class="label">titlecase:</span> false <span class="preprocessor"># Transform title into titlecase</span></div><div class="line"><span class="label">external_link:</span> true <span class="preprocessor"># Open external links in new tab</span></div><div class="line"><span class="label">filename_case:</span> <span class="number">0</span></div><div class="line"><span class="label">render_drafts:</span> false</div><div class="line"><span class="label">post_asset_folder:</span> false</div><div class="line"><span class="label">relative_link:</span> false</div><div class="line"><span class="label">highlight:</span></div><div class="line">  enable: true</div><div class="line">  line_number: true</div><div class="line">  tab_replace:</div><div class="line"></div><div class="line"><span class="preprocessor"># Category & Tag</span></div><div class="line"><span class="label">default_category:</span> uncategorized</div><div class="line"><span class="label">category_map:</span></div><div class="line"><span class="label">tag_map:</span></div><div class="line"></div><div class="line"><span class="preprocessor"># Archives</span></div><div class="line"><span class="preprocessor">## 2: Enable pagination</span></div><div class="line"><span class="preprocessor">## 1: Disable pagination</span></div><div class="line"><span class="preprocessor">## 0: Fully Disable</span></div><div class="line"><span class="label">archive:</span> <span class="number">2</span></div><div class="line"><span class="label">category:</span> <span class="number">2</span></div><div class="line"><span class="label">tag:</span> <span class="number">2</span></div><div class="line"></div><div class="line"><span class="preprocessor"># Server</span></div><div class="line"><span class="preprocessor">## Hexo uses Connect as a server</span></div><div class="line"><span class="preprocessor">## You can customize the logger format as defined in</span></div><div class="line"><span class="preprocessor">## http://www.senchalabs.org/connect/logger.html</span></div><div class="line"><span class="label">port:</span> <span class="number">8008</span></div><div class="line"><span class="label">server_ip:</span> localhost</div><div class="line"><span class="label">logger:</span> false</div><div class="line"><span class="label">logger_format:</span> dev</div><div class="line"></div><div class="line"><span class="preprocessor"># Date / Time format</span></div><div class="line"><span class="preprocessor">## Hexo uses Moment.js to parse and display date</span></div><div class="line"><span class="preprocessor">## You can customize the date format as defined in</span></div><div class="line"><span class="preprocessor">## http://momentjs.com/docs/#/displaying/format/</span></div><div class="line"><span class="label">date_format:</span> MMM D YYYY</div><div class="line"><span class="label">time_format:</span> H:mm:ss</div><div class="line"></div><div class="line"><span class="preprocessor"># Pagination</span></div><div class="line"><span class="preprocessor">## Set per_page to 0 to disable pagination</span></div><div class="line"><span class="label">per_page:</span> <span class="number">3</span></div><div class="line"><span class="label">pagination_dir:</span> page</div><div class="line"></div><div class="line"><span class="preprocessor"># Disqus</span></div><div class="line"><span class="label">disqus_shortname:</span></div><div class="line"></div><div class="line"><span class="preprocessor"># Extensions</span></div><div class="line"><span class="preprocessor">## Plugins: https://github.com/hexojs/hexo/wiki/Plugins</span></div><div class="line"><span class="preprocessor">## Themes: https://github.com/hexojs/hexo/wiki/Themes</span></div><div class="line"><span class="label">theme:</span> phase</div><div class="line"><span class="label">exclude_generator:</span></div><div class="line"></div><div class="line"><span class="preprocessor"># Deployment</span></div><div class="line"><span class="preprocessor">## Docs: http://hexo.io/docs/deployment.html</span></div><div class="line"><span class="label">deploy:</span></div><div class="line">  type: github</div><div class="line">  repo: https://github.com/babraham123/mysite-blog.git</div></pre></td></tr></table></figure>
-
-<p>Create a new post. Images also go in the source folder.</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">hexo <span class="keyword">new</span> post <span class="string">"Title"</span> </div><div class="line"><span class="keyword">vi</span> <span class="keyword">source</span>/_posts/Title.md</div></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight " markdown""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="header"># Post title</span></div><div class="line"><span class="header">## subtitle</span></div><div class="line"></div><div class="line"><span class="strong">**by Bereket Abraham**</span></div><div class="line"></div><div class="line">[<span class="link_label">Visit GitHub!</span>](<span class="link_url">www.github.com</span>)</div><div class="line"></div><div class="line">Filler paragraph.</div><div class="line"></div><div class="line">![](test.png)</div></pre></td></tr></table></figure>
-
-<p>Generate html files and deploy to git</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo <span class="keyword">generate</span> <span class="comment">--deploy</span></div></pre></td></tr></table></figure>
-
-<p>Start a test server to check your post. <a href="http://localhost:4000/blog/" target="_blank" rel="external">http://localhost:4000/blog/</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo <span class="keyword">server</span></div></pre></td></tr></table></figure>
-
+      <h3 id="Hexo_is_a_Node_module_for_generating_html_files_from_Markdown,_and_is_great_for_making_blog_posts-_The_best_method_seems_to_be_writing/generating_your_posts_on_a_local_computer,_then_deploying_your_project_to_the_remote_server-">Hexo is a Node module for generating html files from Markdown, and is great for making blog posts. The best method seems to be writing/generating your posts on a local computer, then deploying your project to the remote server.</h3><p>Installs<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install -g hexo</span><br></pre></td></tr></table></figure></p>
+<p>Start a new Hexo project<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog&#10;cd myblog&#10;sudo npm install</span><br></pre></td></tr></table></figure></p>
+<p>Download the phase theme (optional)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/tommy351/hexo-theme-phase.git themes/phase</span><br></pre></td></tr></table></figure></p>
+<p>Configure your git repo, port #, etc<br><code>vi _config.yaml</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Hexo Configuration&#10;## Docs: http://hexo.io/docs/configuration.html&#10;## Source: https://github.com/hexojs/hexo/&#10;&#10;# Site&#10;title: Greasy Keys&#10;subtitle: hardware meets software&#10;description:&#10;author: Bereket Abraham&#10;email: babraham42@gmail.com&#10;language: en-US&#10;&#10;# URL&#10;## If your site is put in a subdirectory, set url as &#39;http://yoursite.com/child&#39; and root as &#39;/child/&#39;&#10;url: http://bereketabraham.com/blog&#10;root: /blog/&#10;permalink: :year/:month/:day/:title/&#10;tag_dir: tags&#10;archive_dir: archives&#10;category_dir: categories&#10;code_dir: downloads/code&#10;permalink_defaults:&#10;&#10;# Directory&#10;source_dir: source&#10;public_dir: public&#10;&#10;# Writing&#10;new_post_name: :year-:month-:day-:title.md&#10;default_layout: post&#10;titlecase: false # Transform title into titlecase&#10;external_link: true # Open external links in new tab&#10;filename_case: 0&#10;render_drafts: false&#10;post_asset_folder: false&#10;relative_link: false&#10;highlight:&#10;  enable: true&#10;  line_number: true&#10;  tab_replace:&#10;&#10;# Category &#38; Tag&#10;default_category: uncategorized&#10;category_map:&#10;tag_map:&#10;&#10;# Archives&#10;## 2: Enable pagination&#10;## 1: Disable pagination&#10;## 0: Fully Disable&#10;archive: 2&#10;category: 2&#10;tag: 2&#10;&#10;# Server&#10;## Hexo uses Connect as a server&#10;## You can customize the logger format as defined in&#10;## http://www.senchalabs.org/connect/logger.html&#10;port: 8008&#10;server_ip: localhost&#10;logger: false&#10;logger_format: dev&#10;&#10;# Date / Time format&#10;## Hexo uses Moment.js to parse and display date&#10;## You can customize the date format as defined in&#10;## http://momentjs.com/docs/#/displaying/format/&#10;date_format: MMM D YYYY&#10;time_format: H:mm:ss&#10;&#10;# Pagination&#10;## Set per_page to 0 to disable pagination&#10;per_page: 3&#10;pagination_dir: page&#10;&#10;# Disqus&#10;disqus_shortname:&#10;&#10;# Extensions&#10;## Plugins: https://github.com/hexojs/hexo/wiki/Plugins&#10;## Themes: https://github.com/hexojs/hexo/wiki/Themes&#10;theme: phase&#10;exclude_generator:&#10;&#10;# Deployment&#10;## Docs: http://hexo.io/docs/deployment.html&#10;deploy:&#10;  type: github&#10;  repo: https://github.com/babraham123/mysite-blog.git</span><br></pre></td></tr></table></figure></p>
+<p>Create a new post. Images also go in the source folder.<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new post &#34;Title&#34; &#10;vi source/_posts/Title.md</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Post title&#10;## subtitle&#10;&#10;**by Bereket Abraham**&#10;&#10;[Visit GitHub!](www.github.com)&#10;&#10;Filler paragraph.&#10;&#10;![](test.png)</span><br></pre></td></tr></table></figure>
+<p>Generate html files and deploy to git<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate --deploy</span><br></pre></td></tr></table></figure></p>
+<p>Start a test server to check your post. <a href="http://localhost:4000/blog/" target="_blank" rel="external">http://localhost:4000/blog/</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
 <hr>
 <p><strong>How to run server on remote server in production environment.</strong><br>On remote server:</p>
-<p>Installs</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> yum install node</div><div class="line"><span class="built_in">sudo</span> yum install upstart</div><div class="line"><span class="built_in">sudo</span> npm install -g forever</div></pre></td></tr></table></figure>
-
-<p>Clone git repo and create application file<br><code>vi blog_server.js</code></p>
-<figure class="highlight " javascript""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>(<span class="string">'hexo'</span>).init({<span class="command"><span class="keyword">command</span>: <span class="string">'server'</span>});</span></div></pre></td></tr></table></figure>
-
-<p>Add Hexo to the package config and install locally<br><code>vi package.json</code></p>
-<figure class="highlight " json""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">{</div><div class="line">  "<span class="attribute">name</span>": <span class="value"><span class="string">"hexo-site"</span></span>,</div><div class="line">  "<span class="attribute">version</span>": <span class="value"><span class="string">"2.8.2"</span></span>,</div><div class="line">  "<span class="attribute">private</span>": <span class="value"><span class="literal">true</span></span>,</div><div class="line">  "<span class="attribute">dependencies</span>": <span class="value">{</span></div><div class="line">    "<span class="attribute">hexo</span>": <span class="value"><span class="string">"2.8.2"</span></span>,</div><div class="line">    "<span class="attribute">hexo-renderer-ejs</span>": <span class="value"><span class="string">"*"</span></span>,</div><div class="line">    "<span class="attribute">hexo-renderer-stylus</span>": <span class="value"><span class="string">"*"</span></span>,</div><div class="line">    "<span class="attribute">hexo-renderer-marked</span>": <span class="value"><span class="string">"*"</span></span></div><div class="line">  }</div><div class="line">}</div></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> npm install</div></pre></td></tr></table></figure>
-
-<p>Create new Upstart service<br><code>vi /etc/init/myblog.conf</code></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">description "node hexo server for my blog - myblog”</div><div class="line"><span class="operator"><span class="keyword">start</span> <span class="keyword">on</span> runlevel [<span class="number">2345</span>]</span></div><div class="line"><span class="keyword">stop</span> <span class="keyword">on</span> runlevel [<span class="number">06</span>]</div><div class="line"></div><div class="line">expect fork</div><div class="line">respond</div><div class="line">respawn <span class="keyword">limit</span> <span class="number">10</span> <span class="number">5</span></div><div class="line">console <span class="keyword">output</span></div><div class="line"></div><div class="line">script</div><div class="line">        NAME=myblog</div><div class="line">        <span class="keyword">USER</span>=username</div><div class="line">        <span class="keyword">GROUP</span>=wheel</div><div class="line">        MAINFILE=blog_server.js</div><div class="line">        <span class="keyword">LOGFILE</span>=/<span class="keyword">var</span>/<span class="keyword">log</span>/forever/$NAME.<span class="keyword">log</span></div><div class="line">        <span class="keyword">OUTFILE</span>=/<span class="keyword">var</span>/<span class="keyword">log</span>/forever/$NAME_stdout.<span class="keyword">log</span></div><div class="line">        ERRFILE=/<span class="keyword">var</span>/<span class="keyword">log</span>/forever/$NAME_stderr.<span class="keyword">log</span></div><div class="line">        LOGDIR=$(dirname $<span class="keyword">LOGFILE</span>)</div><div class="line">        test -d $LOGDIR || mkdir -p $LOGDIR</div><div class="line">        cd /home/$<span class="keyword">USER</span>/$NAME</div><div class="line"></div><div class="line">        <span class="keyword">exec</span> forever <span class="keyword">start</span> -a -l $<span class="keyword">LOGFILE</span> -o $<span class="keyword">OUTFILE</span> -e $ERRFILE $MAINFILE</div><div class="line"><span class="keyword">end</span> script</div><div class="line"></div><div class="line">post-<span class="keyword">start</span> script</div><div class="line">   echo <span class="string">"myblog started through forever + upstart”</span></div><div class="line">end script</div></pre></td></tr></table></figure>
-
-<p>Start the Node service</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> start myblog</div></pre></td></tr></table></figure>
-
-<p>View status of all services</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> initctl list</div></pre></td></tr></table></figure>
-
+<p>Installs<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install node&#10;sudo yum install upstart&#10;sudo npm install -g forever</span><br></pre></td></tr></table></figure></p>
+<p>Clone git repo and create application file<br><code>vi blog_server.js</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">require(&#39;hexo&#39;).init(&#123;command: &#39;server&#39;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Add Hexo to the package config and install locally<br><code>vi package.json</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#10;  &#34;name&#34;: &#34;hexo-site&#34;,&#10;  &#34;version&#34;: &#34;2.8.2&#34;,&#10;  &#34;private&#34;: true,&#10;  &#34;dependencies&#34;: &#123;&#10;    &#34;hexo&#34;: &#34;2.8.2&#34;,&#10;    &#34;hexo-renderer-ejs&#34;: &#34;*&#34;,&#10;    &#34;hexo-renderer-stylus&#34;: &#34;*&#34;,&#10;    &#34;hexo-renderer-marked&#34;: &#34;*&#34;&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install</span><br></pre></td></tr></table></figure>
+<p>Create new Upstart service<br><code>vi /etc/init/myblog.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node hexo server for my blog - myblog&#8221;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respond&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=myblog&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=blog_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE&#10;end script&#10;&#10;post-start script&#10;   echo &#34;myblog started through forever + upstart&#8221;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start myblog</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
 
     
     
@@ -142,108 +156,18 @@
   </header>
   <div class="entry-content">
     
-      <h3 id="Setting_up_the_Nginx_reverse_proxy_to_run_a_node_Socket-io_server_in_parallel_with_Django-_Using_Forever_and_Upstart_to_manage_the_Node_process-">Setting up the Nginx reverse proxy to run a node Socket.io server in parallel with Django. Using Forever and Upstart to manage the Node process.</h3>
-<p>Install packages (centos)</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> yum install npm</div><div class="line"><span class="built_in">sudo</span> npm install forever -g</div></pre></td></tr></table></figure>
-
-<p>Add all of application specific code. For beginners, use this <a href="http://www.nodebeginner.org/" target="_blank" rel="external">tutorial</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">mkdir</span> mysocketio && <span class="keyword">cd</span> mysocketio</div></pre></td></tr></table></figure>
-
-<p>Create the <code>package.json</code> file and locally install project packages</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm <span class="operator"><span class="keyword">install</span></span></div></pre></td></tr></table></figure>
-
-<p>Set file permissions<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">su</div><div class="line"><span class="keyword">chmod</span> <span class="number">755</span> /home</div><div class="line"><span class="keyword">chmod</span> <span class="number">755</span> /home/username</div><div class="line"><span class="keyword">chmod</span> <span class="number">755</span> /home/username/mysocketio -R</div><div class="line"><span class="keyword">chmod</span> <span class="number">644</span> /home/username/mysocketio/socketio_server.js</div><div class="line"><span class="keyword">exit</span></div></pre></td></tr></table></figure>
-
-<p>Update Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code></p>
-<figure class="highlight " nginx""=""><figcaption><span>"Add the following snippet to the top of your port 80 listener"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="title">location</span> /socket.io/public/ {</div><div class="line">    <span class="title">root</span> /home/babraham/mysocketio;</div><div class="line">}</div><div class="line"></div><div class="line"><span class="title">location</span> /socket.io/ {</div><div class="line">    <span class="title">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</div><div class="line">    <span class="title">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</div><div class="line">    <span class="title">proxy_set_header</span> Connection <span class="string">"upgrade"</span>;</div><div class="line">    <span class="title">proxy_read_timeout</span> <span class="number">120s</span>;</div><div class="line">    <span class="title">proxy_pass</span> <span class="url">http://127.0.0.1:8002</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>You may need to install a more recent version of Nginx <a href="https://webtatic.com/packages/nginx14/" target="_blank" rel="external">cite</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm</div><div class="line"><span class="built_in">sudo</span> yum install nginx16</div></pre></td></tr></table></figure>
-
-<p>Reload and restart</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> nginx <span class="operator">-s</span> reload</div><div class="line"><span class="built_in">sudo</span> service nginx restart</div></pre></td></tr></table></figure>
-
-<p>Create a new Upstart service<br><code>vi /etc/init/mysocketio.conf</code></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">description "node server for socket.io connections - mysocketio"</div><div class="line"><span class="operator"><span class="keyword">start</span> <span class="keyword">on</span> runlevel [<span class="number">2345</span>]</span></div><div class="line"><span class="keyword">stop</span> <span class="keyword">on</span> runlevel [<span class="number">06</span>]</div><div class="line"></div><div class="line">expect fork</div><div class="line">respawn</div><div class="line">respawn <span class="keyword">limit</span> <span class="number">10</span> <span class="number">5</span></div><div class="line">console <span class="keyword">output</span></div><div class="line"></div><div class="line">script</div><div class="line">        NAME=mysocketio</div><div class="line">        PORT=<span class="number">8002</span></div><div class="line">        <span class="keyword">USER</span>=username</div><div class="line">        <span class="keyword">GROUP</span>=wheel</div><div class="line">        MAINFILE=socketio_server.js</div><div class="line">        <span class="keyword">LOGFILE</span>=/<span class="keyword">var</span>/<span class="keyword">log</span>/forever/$NAME.<span class="keyword">log</span></div><div class="line">        <span class="keyword">OUTFILE</span>=/<span class="keyword">var</span>/<span class="keyword">log</span>/forever/$NAME_stdout.<span class="keyword">log</span></div><div class="line">        ERRFILE=/<span class="keyword">var</span>/<span class="keyword">log</span>/forever/$NAME_stderr.<span class="keyword">log</span></div><div class="line">        LOGDIR=$(dirname $<span class="keyword">LOGFILE</span>)</div><div class="line">        test -d $LOGDIR || mkdir -p $LOGDIR</div><div class="line">        cd /home/$<span class="keyword">USER</span>/$NAME</div><div class="line"></div><div class="line">        <span class="keyword">exec</span> forever <span class="keyword">start</span> -a -l $<span class="keyword">LOGFILE</span> -o $<span class="keyword">OUTFILE</span> -e $ERRFILE $MAINFILE $PORT</div><div class="line"><span class="keyword">end</span> script</div><div class="line"></div><div class="line">post-<span class="keyword">start</span> script</div><div class="line">   echo <span class="string">"mysocketio started through forever + upstart"</span></div><div class="line"><span class="keyword">end</span> script</div></pre></td></tr></table></figure>
-
-<p>Start the Node service</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> start mysocketio</div></pre></td></tr></table></figure>
-
-<p>View status of all services</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> initctl list</div></pre></td></tr></table></figure>
-
+      <h3 id="Setting_up_the_Nginx_reverse_proxy_to_run_a_node_Socket-io_server_in_parallel_with_Django-_Using_Forever_and_Upstart_to_manage_the_Node_process-">Setting up the Nginx reverse proxy to run a node Socket.io server in parallel with Django. Using Forever and Upstart to manage the Node process.</h3><p>Install packages (centos)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install forever -g</span><br></pre></td></tr></table></figure></p>
+<p>Add all of application specific code. For beginners, use this <a href="http://www.nodebeginner.org/" target="_blank" rel="external">tutorial</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir mysocketio &#38;&#38; cd mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>Create the <code>package.json</code> file and locally install project packages<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
+<p>Set file permissions<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;chmod 755 /home&#10;chmod 755 /home/username&#10;chmod 755 /home/username/mysocketio -R&#10;chmod 644 /home/username/mysocketio/socketio_server.js&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p>Update Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><figcaption><span>"Add the following snippet to the top of your port 80 listener"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location /socket.io/public/ &#123;&#10;    root /home/babraham/mysocketio;&#10;&#125;&#10;&#10;location /socket.io/ &#123;&#10;    proxy_http_version 1.1;&#10;    proxy_set_header Upgrade $http_upgrade;&#10;    proxy_set_header Connection &#34;upgrade&#34;;&#10;    proxy_read_timeout 120s;&#10;    proxy_pass http://127.0.0.1:8002;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>You may need to install a more recent version of Nginx <a href="https://webtatic.com/packages/nginx14/" target="_blank" rel="external">cite</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm&#10;sudo yum install nginx16</span><br></pre></td></tr></table></figure></p>
+<p>Reload and restart<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Create a new Upstart service<br><code>vi /etc/init/mysocketio.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node server for socket.io connections - mysocketio&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respawn&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=mysocketio&#10;        PORT=8002&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=socketio_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE $PORT&#10;end script&#10;&#10;post-start script&#10;   echo &#34;mysocketio started through forever + upstart&#34;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
 <p><a href="http://technosophos.com/2013/03/06/how-use-ubuntus-upstart-control-nodejs-forever.html" target="_blank" rel="external">Upstart + Forever</a></p>
 <p><a href="http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/" target="_blank" rel="external">Nginx</a></p>
-
-    
-    
-    <footer class="meta">
-      
-      
-      
-    </footer>
-    
-  </div>
-  
-</article>
-
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <header>
-    
-  
-    <h1 class="title"><a href="/blog/2014/08/23/Raspberry-Pi-Setup/">Raspberry Pi Setup</a></h1>
-  
-
-    <time datetime="2014-08-23T21:41:18.000Z">
-  <span class="day">23</span><span class="month">Aug</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <p><strong>How to setup a Raspberry Pi</strong> (assuming you’ve already bought the supporting components, like a power supply, wiki dongle, and ethernet cable.)</p>
-<p>Plug SD card into your computer to format</p>
-<p>Open disk utility and erase card. Set the name and the format to “MS-DOS (FAT)”</p>
-<figure class="highlight " bash""=""><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">diskutil list</div><div class="line"># <span class="keyword">find</span> your card, example <span class="regexp">/dev/</span>disk38</div><div class="line">diskutil unmountdisk <span class="regexp">/dev/</span>disk38</div></pre></td></tr></table></figure>
-
-<p>Download your pi OS image and cd to folder. <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Download</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo dd <span class="keyword">if</span>=<span class="number">2014</span>-<span class="number">06</span>-<span class="number">20</span>-wheezy-raspbian.img of=<span class="regexp">/dev/</span>disk38 bs=<span class="number">2</span>m</div><div class="line"># (flash OS image onto card, <span class="keyword">if</span>=<span class="keyword">source</span>, of=target, bs=<span class="keyword">size</span>)</div></pre></td></tr></table></figure>
-
-<p>Plug in peripherals, like keyboard, ethernet cable, and power</p>
-<p>In order to locate your pi on the wifi network, install mmap, run it, and ssh into your pi</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ifconfig (<span class="keyword">get</span> local ip address)</div><div class="line">nmap -sn <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span></div><div class="line">ssh pi@<span class="number">192.168</span><span class="number">.1</span><span class="number">.88</span></div><div class="line"><span class="preprocessor"># username= pi</span></div><div class="line"><span class="preprocessor"># password= raspberry</span></div></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo raspi-config</div><div class="line">(<span class="operator"><span class="keyword">set</span> <span class="keyword">password</span>, OS <span class="keyword">size</span>, locale, )</span></div><div class="line">username= <span class="keyword">pi</span></div><div class="line"><span class="keyword">password</span>= typical</div></pre></td></tr></table></figure>
-
-<p>Set up environment</p>
-<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></div><div class="line">sudo apt-<span class="built_in">get</span> upgrade</div><div class="line">sudo apt-<span class="built_in">get</span> autoremove</div></pre></td></tr></table></figure>
-
-<p>Wifi dongle setup</p>
-<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo cp /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf.bak</div><div class="line">sudo nano /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf</div></pre></td></tr></table></figure>
-
-<p>Change your ssid/password</p>
-<figure class="highlight " nginx""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="variable">ctrl_interface=</span><span class="variable">DIR=</span>/var/run/wpa_supplicant <span class="variable">GROUP=</span>netdev</div><div class="line"><span class="variable">update_config=</span><span class="number">1</span></div><div class="line"></div><div class="line"><span class="variable">network=</span>{</div><div class="line">        <span class="variable">ssid=</span><span class="string">"your_ssid"</span></div><div class="line">        <span class="variable">psk=</span><span class="string">"your_pass"</span></div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>Reboot and log back in<br><code>sudo reboot</code></p>
-<figure class="highlight " bash""=""><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="title">nmap</span> -sn <span class="number">192.168.1.0</span>/<span class="number">24</span></div><div class="line"><span class="comment"># find ip address again</span></div><div class="line">ssh pi@<span class="number">192.168.1.56</span></div></pre></td></tr></table></figure>
-
-<p><strong>Extra:</strong><br>for GUI, after you plugin a monitor<br><code>startx</code> </p>
-<p>Shutdown command<br><code>sudo shutdown -h now</code></p>
 
     
     
@@ -260,10 +184,10 @@
 
 <nav id="pagenavi">
   
-    <a href="/blog/" class="alignleft prev">Prev</a>
+    <a href="/blog/" class="alignleft prev">上一頁</a>
   
   
-    <a href="/blog/page/3/" class="alignright next">Next</a>
+    <a href="/blog/page/3/" class="alignright next">下一頁</a>
   
   <div class="clearfix"></div>
 </nav></div>
@@ -276,7 +200,7 @@
 </div>
 <p>
   
-  &copy; 2014 Bereket Abraham
+  &copy; 2015 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>

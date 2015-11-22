@@ -23,9 +23,9 @@ Plug SD ">
   <header id="header" class="inner"><nav>
   <ul>
     
-      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Home</a></li>
     
-      <li><a href="/archives">Archives</a></li>
+      <li><a href="/blog/archives">Archives</a></li>
     
   </ul>
 </nav></header>
@@ -57,32 +57,15 @@ Plug SD ">
     
       <p><strong>How to setup a Raspberry Pi</strong> (assuming you’ve already bought the supporting components, like a power supply, wiki dongle, and ethernet cable.)</p>
 <p>Plug SD card into your computer to format</p>
-<p>Open disk utility and erase card. Set the name and the format to “MS-DOS (FAT)”</p>
-<figure class="highlight " bash""=""><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">diskutil list</div><div class="line"># <span class="keyword">find</span> your card, example <span class="regexp">/dev/</span>disk38</div><div class="line">diskutil unmountdisk <span class="regexp">/dev/</span>disk38</div></pre></td></tr></table></figure>
-
-<p>Download your pi OS image and cd to folder. <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Download</a></p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo dd <span class="keyword">if</span>=<span class="number">2014</span>-<span class="number">06</span>-<span class="number">20</span>-wheezy-raspbian.img of=<span class="regexp">/dev/</span>disk38 bs=<span class="number">2</span>m</div><div class="line"># (flash OS image onto card, <span class="keyword">if</span>=<span class="keyword">source</span>, of=target, bs=<span class="keyword">size</span>)</div></pre></td></tr></table></figure>
-
+<p>Open disk utility and erase card. Set the name and the format to “MS-DOS (FAT)”<br><figure class="highlight"><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diskutil list&#10;# find your card, example /dev/disk38&#10;diskutil unmountdisk /dev/disk38</span><br></pre></td></tr></table></figure></p>
+<p>Download your pi OS image and cd to folder. <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Download</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if=2014-06-20-wheezy-raspbian.img of=/dev/disk38 bs=2m&#10;# (flash OS image onto card, if=source, of=target, bs=size)</span><br></pre></td></tr></table></figure></p>
 <p>Plug in peripherals, like keyboard, ethernet cable, and power</p>
-<p>In order to locate your pi on the wifi network, install mmap, run it, and ssh into your pi</p>
-<figure class="highlight " bash""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ifconfig (<span class="keyword">get</span> local ip address)</div><div class="line">nmap -sn <span class="number">192.168</span><span class="number">.1</span><span class="number">.0</span>/<span class="number">24</span></div><div class="line">ssh pi@<span class="number">192.168</span><span class="number">.1</span><span class="number">.88</span></div><div class="line"><span class="preprocessor"># username= pi</span></div><div class="line"><span class="preprocessor"># password= raspberry</span></div></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo raspi-config</div><div class="line">(<span class="operator"><span class="keyword">set</span> <span class="keyword">password</span>, OS <span class="keyword">size</span>, locale, )</span></div><div class="line">username= <span class="keyword">pi</span></div><div class="line"><span class="keyword">password</span>= typical</div></pre></td></tr></table></figure>
-
-<p>Set up environment</p>
-<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> <span class="keyword">update</span></div><div class="line">sudo apt-<span class="built_in">get</span> upgrade</div><div class="line">sudo apt-<span class="built_in">get</span> autoremove</div></pre></td></tr></table></figure>
-
-<p>Wifi dongle setup</p>
-<figure class="highlight " bash""=""><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo cp /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf.bak</div><div class="line">sudo nano /etc/wp<span class="built_in">a_supplicant</span>/wp<span class="built_in">a_supplicant</span>.conf</div></pre></td></tr></table></figure>
-
-<p>Change your ssid/password</p>
-<figure class="highlight " nginx""=""><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="variable">ctrl_interface=</span><span class="variable">DIR=</span>/var/run/wpa_supplicant <span class="variable">GROUP=</span>netdev</div><div class="line"><span class="variable">update_config=</span><span class="number">1</span></div><div class="line"></div><div class="line"><span class="variable">network=</span>{</div><div class="line">        <span class="variable">ssid=</span><span class="string">"your_ssid"</span></div><div class="line">        <span class="variable">psk=</span><span class="string">"your_pass"</span></div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>Reboot and log back in<br><code>sudo reboot</code></p>
-<figure class="highlight " bash""=""><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="title">nmap</span> -sn <span class="number">192.168.1.0</span>/<span class="number">24</span></div><div class="line"><span class="comment"># find ip address again</span></div><div class="line">ssh pi@<span class="number">192.168.1.56</span></div></pre></td></tr></table></figure>
-
+<p>In order to locate your pi on the wifi network, install mmap, run it, and ssh into your pi<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig (get local ip address)&#10;nmap -sn 192.168.1.0/24&#10;ssh pi@192.168.1.88&#10;# username= pi&#10;# password= raspberry</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config&#10;(set password, OS size, locale, )&#10;username= pi&#10;password= typical</span><br></pre></td></tr></table></figure>
+<p>Set up environment<br><figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update&#10;sudo apt-get upgrade&#10;sudo apt-get autoremove</span><br></pre></td></tr></table></figure></p>
+<p>Wifi dongle setup<br><figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.bak&#10;sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure></p>
+<p>Change your ssid/password<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev&#10;update_config=1&#10;&#10;network=&#123;&#10;        ssid=&#34;your_ssid&#34;&#10;        psk=&#34;your_pass&#34;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Reboot and log back in<br><code>sudo reboot</code><br><figure class="highlight"><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sn 192.168.1.0/24&#10;# find ip address again&#10;ssh pi@192.168.1.56</span><br></pre></td></tr></table></figure></p>
 <p><strong>Extra:</strong><br>for GUI, after you plugin a monitor<br><code>startx</code> </p>
 <p>Shutdown command<br><code>sudo shutdown -h now</code></p>
 
@@ -106,7 +89,7 @@ Plug SD ">
 </div>
 <p>
   
-  &copy; 2014 Bereket Abraham
+  &copy; 2015 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>

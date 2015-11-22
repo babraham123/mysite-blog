@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>彙整：2015/11 | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner">
+
+<header id="archive-header">
+  <h1 class="alignleft">彙整：2015/11</h1>
+  <div class="search alignright">
+    <form action="http://google.com/search" method="get" accept-charset="utf-8">
+      <input type="search" name="q" results="0" placeholder="搜尋">
+      <input type="hidden" name="q" value="site:bereketabraham.com/blog">
+    </form>
+  </div>
+</header>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2015/11/02/Raspberry-Pi-WiFi-Network/">Raspberry Pi WiFi Network</a></h1>
+  
+
+    <time datetime="2015-11-02T05:32:58.000Z">
+  <span class="day">2</span><span class="month">Nov</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h1 id="rasp-wifi">rasp-wifi</h1><h3 id="Title:_Diagnostics_and_Webserving_on_the_Raspberry_Pi">Title: Diagnostics and Webserving on the Raspberry Pi</h3><p>How to setup a Raspberry Pi as an access point for its own wireless network. The discussion below is a review on some of the ways to interact with this device.</p>
+<h3 id="Talk_Outline">Talk Outline</h3><h4 id="Raspberry_Pi">Raspberry Pi</h4><ul>
+<li>A credit card sized computer that’s significantly cheaper than most of its rivals (~$35)</li>
+<li>Applications: media center, cloud server, smart TV, game emulator, robotics brain, cheap educational tool, home automation, etc</li>
+<li>Great comumunity, including numerous blogs, tutorials and libraries</li>
+</ul>
+<h4 id="The_Problem">The Problem</h4><ul>
+<li>How to easily and wirelessly interact with the Pi. Even for non-interactive projects, you need to diagnose issues, check system health. </li>
+<li>Need a UI of some kind for an embedded, headless PC</li>
+</ul>
+<h4 id="Potential_Solutions_-_Physical_Link">Potential Solutions - Physical Link</h4><ul>
+<li>External monitor<ul>
+<li>requires expensive screen, requires Pi enter display mode</li>
+<li>cost defeats the purpose of buying a low-cost Pi</li>
+</ul>
+</li>
+<li>Ethernet<ul>
+<li>HTTP allows us to use the web browser to display information, receive input. A great cross-device platform</li>
+<li>cumbersome cords, bad for outdoor applications</li>
+</ul>
+</li>
+<li>WiFi<ul>
+<li>looks better but has signal range issues. Difficult to configure</li>
+</ul>
+</li>
+<li>Bluetooth<ul>
+<li>Requires a dedicated client-side application in order to receive and display signals</li>
+</ul>
+</li>
+</ul>
+<h4 id="Potential_Solutions_-_Network">Potential Solutions - Network</h4><ul>
+<li>SSH onto the Pi<ul>
+<li>Requires specialized knowledge to operate, not user friendly</li>
+</ul>
+</li>
+<li>Pi connects to remote server<ul>
+<li>Hosting costs</li>
+<li>Security concerns</li>
+</ul>
+</li>
+<li>Pi becomes a web server that user connects over home network<ul>
+<li>User must somehow detect local ip address (too hard for enduser)</li>
+<li>Or open port on home network and use dynamic ip stuff (not secure)</li>
+</ul>
+</li>
+</ul>
+<h4 id="My_Solution">My Solution</h4><p>Create your own local network with the Raspberry Pi as the router, DNS, and web server.</p>
+<h4 id="Advantages">Advantages</h4><ul>
+<li>Instant wireless connectivity wherever you go</li>
+<li>If internet access becomes available, you can choose to forward remote requests</li>
+<li>No security problems due to limited range</li>
+<li>Leverages web browser as a cross device platform</li>
+<li>Can create custom domain names, network name</li>
+<li>Fairly simple for enduser</li>
+<li>Same method used by Chromecast to configure its wifi connection</li>
+</ul>
+<h4 id="Technologies_used_in_demo">Technologies used in demo</h4><ul>
+<li>hostapd: wifi device mode (access point), network security (WPA2)</li>
+<li>dnsmasq: DHCP and DNS</li>
+<li>nginx: webserving</li>
+<li>socket.io: 2 way communication</li>
+<li>init scripts: automatically stop and start on reboot</li>
+</ul>
+<h4 id="Few_projects_I’ve_built">Few projects I’ve built</h4><ul>
+<li>Interactive LED table: individually addressable, multicolor LEDs</li>
+<li>Smartphone enabled TV remote: chromecast and IR commands</li>
+<li>Weather station: collection of environmental sensors</li>
+</ul>
+<h4 id="Future_Improvements">Future Improvements</h4><ul>
+<li>Try a different WiFi mode. For example, ad hoc or mesh networks (multiple masters)</li>
+<li>Try using Multicast DNS to broadcast domain name over home network</li>
+<li>Try to access webpages over bluetooth<ul>
+<li>Forward http requests over bluetooth PAN</li>
+<li><a href="http://notes.pitfall.org/ip-over-bluetooth-to-a-raspberry-pi.html" target="_blank" rel="external">Bluetooth PAN</a></li>
+</ul>
+</li>
+</ul>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+
+  <nav id="pagenavi">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2015 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>
