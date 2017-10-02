@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo Blog Setup | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Hexo is a Node module for generating html files from Markdown, and is great for making blog posts. The best method seems to be writing/generating your">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Hexo Blog Setup</h1>
+  
+
+    <time datetime="2014-08-24T01:27:53.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Hexo_is_a_Node_module_for_generating_html_files_from_Markdown,_and_is_great_for_making_blog_posts-_The_best_method_seems_to_be_writing/generating_your_posts_on_a_local_computer,_then_deploying_your_project_to_the_remote_server-">Hexo is a Node module for generating html files from Markdown, and is great for making blog posts. The best method seems to be writing/generating your posts on a local computer, then deploying your project to the remote server.</h3><p>Installs<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install -g hexo</span><br></pre></td></tr></table></figure></p>
+<p>Start a new Hexo project<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog&#10;cd myblog&#10;sudo npm install</span><br></pre></td></tr></table></figure></p>
+<p>Download the phase theme (optional)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/tommy351/hexo-theme-phase.git themes/phase</span><br></pre></td></tr></table></figure></p>
+<p>Configure your git repo, port #, etc<br><code>vi _config.yaml</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Hexo Configuration&#10;## Docs: http://hexo.io/docs/configuration.html&#10;## Source: https://github.com/hexojs/hexo/&#10;&#10;# Site&#10;title: Greasy Keys&#10;subtitle: hardware meets software&#10;description:&#10;author: Bereket Abraham&#10;email: babraham42@gmail.com&#10;language: en-US&#10;&#10;# URL&#10;## If your site is put in a subdirectory, set url as &#39;http://yoursite.com/child&#39; and root as &#39;/child/&#39;&#10;url: http://bereketabraham.com/blog&#10;root: /blog/&#10;permalink: :year/:month/:day/:title/&#10;tag_dir: tags&#10;archive_dir: archives&#10;category_dir: categories&#10;code_dir: downloads/code&#10;permalink_defaults:&#10;&#10;# Directory&#10;source_dir: source&#10;public_dir: public&#10;&#10;# Writing&#10;new_post_name: :year-:month-:day-:title.md&#10;default_layout: post&#10;titlecase: false # Transform title into titlecase&#10;external_link: true # Open external links in new tab&#10;filename_case: 0&#10;render_drafts: false&#10;post_asset_folder: false&#10;relative_link: false&#10;highlight:&#10;  enable: true&#10;  line_number: true&#10;  tab_replace:&#10;&#10;# Category &#38; Tag&#10;default_category: uncategorized&#10;category_map:&#10;tag_map:&#10;&#10;# Archives&#10;## 2: Enable pagination&#10;## 1: Disable pagination&#10;## 0: Fully Disable&#10;archive: 2&#10;category: 2&#10;tag: 2&#10;&#10;# Server&#10;## Hexo uses Connect as a server&#10;## You can customize the logger format as defined in&#10;## http://www.senchalabs.org/connect/logger.html&#10;port: 8008&#10;server_ip: localhost&#10;logger: false&#10;logger_format: dev&#10;&#10;# Date / Time format&#10;## Hexo uses Moment.js to parse and display date&#10;## You can customize the date format as defined in&#10;## http://momentjs.com/docs/#/displaying/format/&#10;date_format: MMM D YYYY&#10;time_format: H:mm:ss&#10;&#10;# Pagination&#10;## Set per_page to 0 to disable pagination&#10;per_page: 3&#10;pagination_dir: page&#10;&#10;# Disqus&#10;disqus_shortname:&#10;&#10;# Extensions&#10;## Plugins: https://github.com/hexojs/hexo/wiki/Plugins&#10;## Themes: https://github.com/hexojs/hexo/wiki/Themes&#10;theme: phase&#10;exclude_generator:&#10;&#10;# Deployment&#10;## Docs: http://hexo.io/docs/deployment.html&#10;deploy:&#10;  type: github&#10;  repo: https://github.com/babraham123/mysite-blog.git</span><br></pre></td></tr></table></figure></p>
+<p>Create a new post. Images also go in the source folder.<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new post &#34;Title&#34; &#10;vi source/_posts/Title.md</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Post title&#10;## subtitle&#10;&#10;**by Bereket Abraham**&#10;&#10;[Visit GitHub!](www.github.com)&#10;&#10;Filler paragraph.&#10;&#10;![](test.png)</span><br></pre></td></tr></table></figure>
+<p>Generate html files and deploy to git<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate --deploy</span><br></pre></td></tr></table></figure></p>
+<p>Start a test server to check your post. <a href="http://localhost:4000/blog/" target="_blank" rel="external">http://localhost:4000/blog/</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>How to run server on remote server in production environment.</strong><br>On remote server:</p>
+<p>Installs<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install node&#10;sudo yum install upstart&#10;sudo npm install -g forever</span><br></pre></td></tr></table></figure></p>
+<p>Clone git repo and create application file<br><code>vi blog_server.js</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">require(&#39;hexo&#39;).init(&#123;command: &#39;server&#39;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Add Hexo to the package config and install locally<br><code>vi package.json</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#10;  &#34;name&#34;: &#34;hexo-site&#34;,&#10;  &#34;version&#34;: &#34;2.8.2&#34;,&#10;  &#34;private&#34;: true,&#10;  &#34;dependencies&#34;: &#123;&#10;    &#34;hexo&#34;: &#34;2.8.2&#34;,&#10;    &#34;hexo-renderer-ejs&#34;: &#34;*&#34;,&#10;    &#34;hexo-renderer-stylus&#34;: &#34;*&#34;,&#10;    &#34;hexo-renderer-marked&#34;: &#34;*&#34;&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install</span><br></pre></td></tr></table></figure>
+<p>Create new Upstart service<br><code>vi /etc/init/myblog.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node hexo server for my blog - myblog&#8221;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respond&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=myblog&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=blog_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE&#10;end script&#10;&#10;post-start script&#10;   echo &#34;myblog started through forever + upstart&#8221;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start myblog</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

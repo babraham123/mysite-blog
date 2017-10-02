@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Setup Gunicorn + Nginx + Upstart for Django | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications.">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Setup Gunicorn + Nginx + Upstart for Django</h1>
+  
+
+    <time datetime="2014-08-23T21:11:29.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Nginx_is_a_high-performance_HTTP_server_and_reverse_proxy-_I_use_it_to_serve_static_files_and_route_incoming_requests_among_multiple_web_applications-_Gunicorn_is_a_Python_WSGI_HTTP_Server_for_UNIX_that_I_use_to_serve_Django-_Together,_they_form_a_more_flexible_and_robust_solution_than_Apache-">Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications. Gunicorn is a Python WSGI HTTP Server for UNIX that I use to serve Django. Together, they form a more flexible and robust solution than Apache.</h3><h3 id="Upstart_is_a_great_utility_for_starting,_stopping,_and_supervising_tasks_as_if_they_were_services-">Upstart is a great utility for starting, stopping, and supervising tasks as if they were services.</h3><p>Install<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install gunicorn&#10;sudo yum install nginx&#10;sudo yum install upstart</span><br></pre></td></tr></table></figure></p>
+<p>Record the number of CPUs, use that next for the number of <code>worker_processes</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lscpu | grep &#39;^CPU(s)&#39;</span><br></pre></td></tr></table></figure></p>
+<p><code>vi /etc/nginx/nginx.conf</code><br><figure class="highlight"><figcaption><span>"Insert the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user              nginx;&#10;worker_processes  1;</span><br></pre></td></tr></table></figure></p>
+<p>Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual host using mix of IP-, name-, and port-based configuration&#10;# from the django app, mysite, running on gunicorn&#10;&#10;server &#123;&#10;    listen       80;&#10;#    listen       someip:8080;&#10;    server_name  sitename.com;&#10;&#10;    access_log  /var/log/nginx/mysite.log;&#10;&#10;    location / &#123;&#10;        proxy_set_header Host $http_host;&#10;        proxy_set_header X-Forwarded-Host $server_name;&#10;        proxy_set_header X-Real-IP $remote_addr;&#10;        proxy_pass http://127.0.0.1:8001;&#10;    &#125;&#10;&#10;    location /media/ &#123;&#10;        root /home/username/mysite/media;&#10;    &#125;&#10;&#10;    location /static/ &#123;&#10;        root /home/username/mysite/static;&#10;    &#125;&#10;&#10;    location /admin/media/ &#123;&#10;        # this changes depending on your python version&#10;        root /usr/lib/python2.6/site-packages/django/contrib;&#10;    &#125;&#10;&#10;    error_page   500 502 503 504  /home/username/mysite/static/50x.html;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Reload after configuration changes<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Upstart Configuration<br><code>vi /etc/init/mysite.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;My website - mysite&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;respawn&#10;respawn limit 10 5&#10;&#10;script&#10;                NAME=mysite&#10;                PORT=8001&#10;                NUM_WORKERS=2&#10;                TIMEOUT=120&#10;                USER=username&#10;                GROUP=wheel&#10;                LOGFILE=/var/log/gunicorn/$NAME.log&#10;                LOGDIR=$(dirname $LOGFILE)&#10;                test -d $LOGDIR || mkdir -p $LOGDIR&#10;                cd /home/$USER/$NAME&#10;                exec gunicorn_django \&#10;                         -w $NUM_WORKERS -t $TIMEOUT \&#10;                        --user=$USER --group=$GROUP --log-level=debug \&#10;                        --name=$NAME -b 127.0.0.1:$PORT \&#10;                        --log-file=$LOGFILE 2&#62;&#62;$LOGFILE&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the gunicorn/django service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysite</span><br></pre></td></tr></table></figure></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

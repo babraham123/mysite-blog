@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>LED Table, Part 2 | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Please read part 1 for the full story.
+HardwareThe table construction was definitely the most fun part. The steps were basically measure, cut, sand, s">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">LED Table, Part 2</h1>
+  
+
+    <time datetime="2014-08-24T07:55:23.000Z">
+  <span class="day">24</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><em>Please read part 1 for the full story.</em></p>
+<h2 id="Hardware">Hardware</h2><p>The table construction was definitely the most fun part. The steps were basically measure, cut, sand, stain, screw together, stain, stain, and stain. I made a few mistakes but they were easily covered up using glue and wood filler. I used pegs to join the boards and help hide most of the screws. </p>
+<p><img src="table.png" alt="Table Construction" title="Table Construction"></p>
+<p>Next came the grid to house each individual LED. The grid is needed to prevent different colors from blending together and to help reflect the light upward. Finding the right material was actually pretty hard. I tried thin plywood but it was impossible to cut the precise notches. Judging from the pictures, the Wisconsin student used laser cut balsa wood, but that was too expensive for me. I ended up taking stiff cardboard and cutting out shapes with a box cutter (with plywood sides for support). A professional build would probably use injection-molded plastic, which becomes very cheap at high volumes. Another neat thing I did was make the grid housing removable, so that I can hang it on the wall as a standalone art piece. </p>
+<p><img src="grid.png" alt="Grid" title="Grid"></p>
+<h2 id="Software,_part_2">Software, part 2</h2><p>The next major component was the website’s user interface. The first thing I wrote was a simple textbox for testing. I knew the real UI would probably need a color picker and an animation of the table. The first iteration used the canvas element in HTML5 to draw shapes java-style. However, it was really hard to set the event listeners so I switched to a great JavaScript library called FabricJS. It lets you create shapes as objects, so you can then naturally add listeners, set values, and create custom methods.<br>The next iteration will use the length of time a cell was pressed to help set the color / brightness. </p>
+<p><img src="ui.png" alt="LED UI" title="LED UI"></p>
+<p>Extensions</p>
+<p>Now that the table is mostly functional I can start thinking about extensions and add-ons. The most popular (and complicated) extension would be touch interactivity on the glass surface. Most DIY solutions involve building a grid of IR emitters and receivers. The chief advantages are simplicity and the ability to detect inanimate objects. However, I feel that they are outweighed by many disadvantages; for example, IR sensors can be washed out by house lights and the sun, wiring each emitter-receiver pair is difficult and error prone, and individual sensors results in very low resolution. Luckily, the popularity of touch screen devices has created a number of capacitive touch technologies to choose from. One solution was to place very cheap capacitive touch switches under the glass by each light cell. The switches are robust but face the same wiring and resolution problems as the IR detectors. Another solution was to use a special capacitive touch controller to monitor the entire surface at once (up to a certain size). The controller measures slight variations in the electrical field to pinpoint the exact location of a finger touch.</p>
+<p>Another possible extension would be audio output based on the current light configuration. This <a href="http://tonematrix.audiotool.com" target="_blank" rel="external">web app</a> is a pretty neat example of what you can do. Also, I could wire up a circuit to detect and process audio input, and create a music visualizer.</p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

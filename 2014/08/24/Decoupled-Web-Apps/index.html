@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Decoupled Web Apps | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Decoupling web applicationsThis article outlines a few best practices for developing multiple, independent web applications within the same website or">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Decoupled Web Apps</h1>
+  
+
+    <time datetime="2014-08-24T07:59:23.000Z">
+  <span class="day">24</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h1 id="Decoupling_web_applications">Decoupling web applications</h1><p>This article outlines a few best practices for developing multiple, independent web applications within the same website or even the same webpage. During my experiments, I used python and nodejs for my server-side software. My research into web apps was motived by my recent expansion of my personal website. In order to showcase my web development skills, I added on a section called Labs, where I prototype interesting web applications. Below are some of the lessons I learned.</p>
+<h4 id="Lesson_1,_code_management">Lesson 1, code management</h4><p>Initially, I stored the code for my web apps in the same git repository as the code for my umbrella website, a django app. However, because they functioned independently, I often wanted to develop on and branch each web app differently. So I split the code into multiple repositories and reintroduced them as submodules into the main repo.</p>
+<h4 id="Lesson_2,_libraries_and_dependencies">Lesson 2, libraries and dependencies</h4><p>Personally, I like to save as many dependencies as I can locally in the git repo. That way on a fresh machine I can just git clone and be ready to go. For node that simply means removing <code>\node_modules</code> from the <code>.gitignore</code> file. For python you have to use the <code>virtualenv</code> library.</p>
+<h4 id="Lesson_3,_routing">Lesson 3, routing</h4><p>So I usually run each app on a random unused port on my server. However, keeping track of the port numbers in my main website was turning out to be a pain. So, I installed nginx and used it to reverse proxy to all of my apps, using human readable routes. For example, <code>/app1:80</code> would map to <code>/localhost:8080</code>. I also used it to serve all of my status content.</p>
+<h4 id="Lesson_4,_deployment">Lesson 4, deployment</h4><p>There are a lot of great tools for automated deployment, like Puppet and Jenkins. However, that was total overkill for my website. Instead, I settled for a simple bash script that installs the right config files and restarts the upstart job. I use upstart to run my server as a system service and restart on boot. Each app has its own start script and upstart job.</p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>
