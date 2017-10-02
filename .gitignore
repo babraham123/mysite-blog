@@ -3,3 +3,5 @@ Thumbs.db
 db.json
 debug.log
 .deploy/
+.deploy_git/
+node_modules
