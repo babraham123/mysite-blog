@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Socket.io Setup | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Setting up the Nginx reverse proxy to run a node Socket.io server in parallel with Django. Using Forever and Upstart to manage the Node process.Instal">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Socket.io Setup</h1>
+  
+
+    <time datetime="2014-08-24T00:23:29.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Setting_up_the_Nginx_reverse_proxy_to_run_a_node_Socket-io_server_in_parallel_with_Django-_Using_Forever_and_Upstart_to_manage_the_Node_process-">Setting up the Nginx reverse proxy to run a node Socket.io server in parallel with Django. Using Forever and Upstart to manage the Node process.</h3><p>Install packages (centos)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install forever -g</span><br></pre></td></tr></table></figure></p>
+<p>Add all of application specific code. For beginners, use this <a href="http://www.nodebeginner.org/" target="_blank" rel="external">tutorial</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir mysocketio &#38;&#38; cd mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>Create the <code>package.json</code> file and locally install project packages<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
+<p>Set file permissions<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;chmod 755 /home&#10;chmod 755 /home/username&#10;chmod 755 /home/username/mysocketio -R&#10;chmod 644 /home/username/mysocketio/socketio_server.js&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p>Update Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><figcaption><span>"Add the following snippet to the top of your port 80 listener"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location /socket.io/public/ &#123;&#10;    root /home/babraham/mysocketio;&#10;&#125;&#10;&#10;location /socket.io/ &#123;&#10;    proxy_http_version 1.1;&#10;    proxy_set_header Upgrade $http_upgrade;&#10;    proxy_set_header Connection &#34;upgrade&#34;;&#10;    proxy_read_timeout 120s;&#10;    proxy_pass http://127.0.0.1:8002;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>You may need to install a more recent version of Nginx <a href="https://webtatic.com/packages/nginx14/" target="_blank" rel="external">cite</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm&#10;sudo yum install nginx16</span><br></pre></td></tr></table></figure></p>
+<p>Reload and restart<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Create a new Upstart service<br><code>vi /etc/init/mysocketio.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node server for socket.io connections - mysocketio&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respawn&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=mysocketio&#10;        PORT=8002&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=socketio_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE $PORT&#10;end script&#10;&#10;post-start script&#10;   echo &#34;mysocketio started through forever + upstart&#34;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://technosophos.com/2013/03/06/how-use-ubuntus-upstart-control-nodejs-forever.html" target="_blank" rel="external">Upstart + Forever</a></p>
+<p><a href="http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/" target="_blank" rel="external">Nginx</a></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

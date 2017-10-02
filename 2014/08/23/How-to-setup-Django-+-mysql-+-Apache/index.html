@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>How to setup Django + mysql + Apache | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  <meta name="description" content="Below is a step by step account of how to set up a django (1.6) web application on a CentOS (6.4) server, running Apache (2.5) and python (2.6, 2.7)1:">
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">How to setup Django + mysql + Apache</h1>
+  
+
+    <time datetime="2014-08-23T18:21:36.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Below_is_a_step_by_step_account_of_how_to_set_up_a_django_(1-6)_web_application_on_a_CentOS_(6-4)_server,_running_Apache_(2-5)_and_python_(2-6,_2-7)">Below is a step by step account of how to set up a django (1.6) web application on a CentOS (6.4) server, running Apache (2.5) and python (2.6, 2.7)</h3><p>1: <strong>Login as root and set up a new user</strong></p>
+<p>You probably want to eventually disable root login<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@[ip address]</span><br></pre></td></tr></table></figure></p>
+<p>Create user<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd myuser&#10;passwd myuser</span><br></pre></td></tr></table></figure></p>
+<p>Add user to a sudo enabled group<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -a -G wheel myuser</span><br></pre></td></tr></table></figure></p>
+<p>Allow the wheel group to use sudo by editing the shudders file<br><code>visudo -f /etc/sudoers</code><br><figure class="highlight"><figcaption><span>"edit the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">## Allows people in group wheel to run all commands&#10;# %wheel        ALL=(ALL)       ALL</span><br></pre></td></tr></table></figure></p>
+<p><code>exit</code></p>
+<p>2: <strong>Login without typing in your password (not strictly necessary)</strong> <a href="http://wiki.centos.org/HowTos/Network/SecuringSSH" target="_blank" rel="external">cite</a></p>
+<p>On your local machine, generate public/private key<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure></p>
+<p>Set permissions on your private key<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~/.ssh&#10;chmod 600 ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure></p>
+<p>Copy your public key onto remote server<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp ~/.ssh/id_rsa.pub myuser@[ip address]:/home/myuser</span><br></pre></td></tr></table></figure></p>
+<p>On remote machine<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh myuser@[ip address]&#10;mkdir ~/.ssh&#10;touch ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>Add public key to authorized list<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat id_rsa.pub &#62;&#62; ~/.ssh/authorized_keys&#10;rm id_rsa.pub</span><br></pre></td></tr></table></figure></p>
+<p>Set permissions<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~/.ssh&#10;chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>3: <strong>Install necessary packages. Since this is for CentOS, we yum.</strong> <a href="http://itekblog.com/django-centos-6-4/" target="_blank" rel="external">cite</a></p>
+<p>Check centos version. These cmds are for centos 6.4<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
+<p><code>su</code></p>
+<p>Add the EPEL repositories to get Django<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/&#10;wget http://mirrors.nl.eu.kernel.org/fedora-epel/6/i386/epel-release-6-8.noarch.rpm&#10;rpm -Uvh epel-release-6-8.noarch.rpm&#10;rm epel-release-6-8.noarch.rpm -f</span><br></pre></td></tr></table></figure></p>
+<p>Install packages<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum upgrade&#10;yum install python&#10;&#9;(should be 2.6.6)&#10;yum install sqlite&#10;yum install mod_wsgi&#10;yum install mysql mysql-server&#10;&#10;yum install python-pip&#10;pip install Django==1.6&#10;&#9;(1.6 or whatever version you want)&#10;yum -y install mysql-devel&#10;yum install MySQL-python</span><br></pre></td></tr></table></figure></p>
+<p>Check to see if django works<br><code>python</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import django&#10;print django.get_version()&#10;quit()</span><br></pre></td></tr></table></figure></p>
+<p><code>exit</code></p>
+<p>4: <strong>Django</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin.py startproject mysite&#10;cd mysite</span><br></pre></td></tr></table></figure>
+<p>Add all of application specific code. For beginners, use this <a href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/" target="_blank" rel="external">tutorial</a></p>
+<p>5: <strong>Create a mysql database (or skip this and use mysqlite)</strong></p>
+<p><code>su</code></p>
+<p>Get mysql working, choose a password<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig --levels 235 mysqld on&#10;/etc/init.d/mysqld start&#10;mysql_secure_installation</span><br></pre></td></tr></table></figure></p>
+<p>Create a new mysql user<br><code>mysql -u root -p</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database mysitedb;&#10;GRANT ALL PRIVILEGES ON mysitedb.* To &#39;user&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;password&#39;;&#10;quit;</span><br></pre></td></tr></table></figure></p>
+<p><code>exit</code></p>
+<p>Add the details to your database to the django settings file<br><code>vi ~/mysite/mysite/settings.py</code><br><figure class="highlight"><figcaption><span>"Add the following snippets"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALLOWED_HOSTS = [&#39;my.server.ip.address&#39;]&#10;&#10;DATABASES = &#123;&#10;    &#39;default&#39;: &#123;&#10;        # Add &#39;postgresql_psycopg2&#39;, &#39;postgresql&#39;, &#39;mysql&#39;, &#39;sqlite3&#39; or &#39;oracle&#39;.                                        &#10;        &#39;ENGINE&#39;: &#39;django.db.backends.mysql&#39;,&#10;        &#39;NAME&#39;: &#39;mysitedb&#39;,&#10;        &#39;USER&#39;: &#39;mysiteuser&#39;,&#10;        &#39;PASSWORD&#39;: &#39;password&#39;,&#10;        &#39;HOST&#39;: &#39;&#39;,&#10;        &#39;PORT&#39;: &#39;&#39;,&#10;    &#125;&#10;&#125;&#10;&#10;TEMPLATE_DIRS = (&#10;    os.path.join(BASE_DIR, &#34;templates&#34;),&#10;)</span><br></pre></td></tr></table></figure></p>
+<p>Have python create mysql tables<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/mysite/&#10;python manage.py syncdb&#10;python manage.py sql [name of app]  # if you have any apps&#10;python manage.py syncdb</span><br></pre></td></tr></table></figure></p>
+<p>6: <strong>Set up mod_wsgi (A python library for Apache). For testing, you can skip this and just use the development server that comes with django (instead of Apache).</strong></p>
+<p>Development server<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure></p>
+<p><code>su</code></p>
+<p>Configure apache module for django<br><code>vi /etc/httpd/conf.d/wsgi.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LoadModule wsgi_module modules/mod_wsgi.so&#10;&#10;&#60;VirtualHost *:80&#62;&#10;  ServerName www.mywebsite.com&#10;  ServerAlias mywebsite.com&#10;  ServerAdmin webmaster@mywebsite.com&#10;&#10;  Alias /static/admin/ /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin/&#10;  Alias /robots.txt /home/username/mysite/static/robots.txt&#10;  Alias /favicon.ico /home/username/mysite/static/favicon.ico&#10;  AliasMatch ^/([^/]*\.css) /home/username/mysite/static/styles/$1&#10;&#10;  Alias /media/ /home/username/mysite/media/&#10;  &#60;Directory /home/username/mysite/media&#62;&#10;    Order deny,allow&#10;    Allow from all&#10;  &#60;/Directory&#62;&#10;&#10;  Alias /static/ /home/username/mysite/static/&#10;  &#60;Directory /home/username/mysite/static&#62;&#10;    Order deny,allow&#10;    Allow from all&#10;  &#60;/Directory&#62;&#10;&#10;#  WSGIDaemonProcess mywebsite.com python-path=/home/username/mysite:/usr/lib/python2.6/&#10;#  WSGIProcessGroup mywebsite.com&#10;&#10;  WSGIScriptAlias / /home/username/mysite/mysite/wsgi.py&#10;&#10;  &#60;Directory /home/username/mysite/mysite&#62;&#10;    &#60;Files wsgi.py&#62;&#10;#      WSGIProcessGroup mywebsite.com&#10;      Order allow,deny&#10;      Allow from all&#10;    &#60;/Files&#62;&#10;  &#60;/Directory&#62;&#10;&#10;&#60;/VirtualHost&#62;</span><br></pre></td></tr></table></figure></p>
+<p>Restart after changing config files<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apachectl restart&#10;# or, if that fails try this version&#10;/sbin/service httpd restart</span><br></pre></td></tr></table></figure></p>
+<p>other commands<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apachectl start&#10;apachectl stop&#10;apachectl status&#10;httpd -v</span><br></pre></td></tr></table></figure></p>
+<p>Testing: <code>vi /var/www/html/index.html</code></p>
+<p>7: <strong>Troubleshooting 403 permission denied errors. After every change, restart apache and check website.</strong></p>
+<p>Set user permissions for project files<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;chmod 755 /home&#10;chmod 755 /home/username&#10;chmod 755 /home/username/mysite -R&#10;chmod 644 /home/username/mysite/wsgi.py&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p>Add project folder to system path<br><code>vi mysite/wsgi.py</code><br><figure class="highlight"><figcaption><span>"Add snippet to the top of the file"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import sys&#10;sys.path.append(&#39;/home/username&#39;)&#10;sys.path.append(&#39;/home/username/mysite&#39;)</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://blog.endpoint.com/2010/02/selinux-httpd-modwsgi-26-rhel-centos-5.html" target="_blank" rel="external">Problems with SELinux</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;setsebool -P httpd_can_network_connect on&#10;setsebool -P httpd_enable_homedirs on&#10;setsebool -P httpd_can_sendmail on&#10;restorecon -vR /etc/httpd&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://code.google.com/p/modwsgi/wiki/WhereToGetHelp?tm=6#Conference_Presentations" target="_blank" rel="external">Config problems on CentOS</a></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>

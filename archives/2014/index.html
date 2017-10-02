@@ -1,0 +1,613 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>彙整：2014 | Greasy Keys</title>
+  <meta name="author" content="Bereket Abraham">
+
+  
+  
+
+  <link rel="alternate" href="/blog/atom.xml" title="Greasy Keys" type="application/atom+xml">
+  <link rel="stylesheet" href="/blog/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/blog">Home</a></li>
+    
+      <li><a href="/blog/archives">Archives</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner">
+
+<header id="archive-header">
+  <h1 class="alignleft">彙整：2014</h1>
+  <div class="search alignright">
+    <form action="http://google.com/search" method="get" accept-charset="utf-8">
+      <input type="search" name="q" results="0" placeholder="搜尋">
+      <input type="hidden" name="q" value="site:bereketabraham.com/blog">
+    </form>
+  </div>
+</header>
+
+
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/24/Decoupled-Web-Apps/">Decoupled Web Apps</a></h1>
+  
+
+    <time datetime="2014-08-24T07:59:23.000Z">
+  <span class="day">24</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h1 id="Decoupling_web_applications">Decoupling web applications</h1><p>This article outlines a few best practices for developing multiple, independent web applications within the same website or even the same webpage. During my experiments, I used python and nodejs for my server-side software. My research into web apps was motived by my recent expansion of my personal website. In order to showcase my web development skills, I added on a section called Labs, where I prototype interesting web applications. Below are some of the lessons I learned.</p>
+<h4 id="Lesson_1,_code_management">Lesson 1, code management</h4><p>Initially, I stored the code for my web apps in the same git repository as the code for my umbrella website, a django app. However, because they functioned independently, I often wanted to develop on and branch each web app differently. So I split the code into multiple repositories and reintroduced them as submodules into the main repo.</p>
+<h4 id="Lesson_2,_libraries_and_dependencies">Lesson 2, libraries and dependencies</h4><p>Personally, I like to save as many dependencies as I can locally in the git repo. That way on a fresh machine I can just git clone and be ready to go. For node that simply means removing <code>\node_modules</code> from the <code>.gitignore</code> file. For python you have to use the <code>virtualenv</code> library.</p>
+<h4 id="Lesson_3,_routing">Lesson 3, routing</h4><p>So I usually run each app on a random unused port on my server. However, keeping track of the port numbers in my main website was turning out to be a pain. So, I installed nginx and used it to reverse proxy to all of my apps, using human readable routes. For example, <code>/app1:80</code> would map to <code>/localhost:8080</code>. I also used it to serve all of my status content.</p>
+<h4 id="Lesson_4,_deployment">Lesson 4, deployment</h4><p>There are a lot of great tools for automated deployment, like Puppet and Jenkins. However, that was total overkill for my website. Instead, I settled for a simple bash script that installs the right config files and restarts the upstart job. I use upstart to run my server as a system service and restart on boot. Each app has its own start script and upstart job.</p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/24/LED-Table,-Part-2/">LED Table, Part 2</a></h1>
+  
+
+    <time datetime="2014-08-24T07:55:23.000Z">
+  <span class="day">24</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><em>Please read part 1 for the full story.</em></p>
+<h2 id="Hardware">Hardware</h2><p>The table construction was definitely the most fun part. The steps were basically measure, cut, sand, stain, screw together, stain, stain, and stain. I made a few mistakes but they were easily covered up using glue and wood filler. I used pegs to join the boards and help hide most of the screws. </p>
+<p><img src="table.png" alt="Table Construction" title="Table Construction"></p>
+<p>Next came the grid to house each individual LED. The grid is needed to prevent different colors from blending together and to help reflect the light upward. Finding the right material was actually pretty hard. I tried thin plywood but it was impossible to cut the precise notches. Judging from the pictures, the Wisconsin student used laser cut balsa wood, but that was too expensive for me. I ended up taking stiff cardboard and cutting out shapes with a box cutter (with plywood sides for support). A professional build would probably use injection-molded plastic, which becomes very cheap at high volumes. Another neat thing I did was make the grid housing removable, so that I can hang it on the wall as a standalone art piece. </p>
+<p><img src="grid.png" alt="Grid" title="Grid"></p>
+<h2 id="Software,_part_2">Software, part 2</h2><p>The next major component was the website’s user interface. The first thing I wrote was a simple textbox for testing. I knew the real UI would probably need a color picker and an animation of the table. The first iteration used the canvas element in HTML5 to draw shapes java-style. However, it was really hard to set the event listeners so I switched to a great JavaScript library called FabricJS. It lets you create shapes as objects, so you can then naturally add listeners, set values, and create custom methods.<br>The next iteration will use the length of time a cell was pressed to help set the color / brightness. </p>
+<p><img src="ui.png" alt="LED UI" title="LED UI"></p>
+<p>Extensions</p>
+<p>Now that the table is mostly functional I can start thinking about extensions and add-ons. The most popular (and complicated) extension would be touch interactivity on the glass surface. Most DIY solutions involve building a grid of IR emitters and receivers. The chief advantages are simplicity and the ability to detect inanimate objects. However, I feel that they are outweighed by many disadvantages; for example, IR sensors can be washed out by house lights and the sun, wiring each emitter-receiver pair is difficult and error prone, and individual sensors results in very low resolution. Luckily, the popularity of touch screen devices has created a number of capacitive touch technologies to choose from. One solution was to place very cheap capacitive touch switches under the glass by each light cell. The switches are robust but face the same wiring and resolution problems as the IR detectors. Another solution was to use a special capacitive touch controller to monitor the entire surface at once (up to a certain size). The controller measures slight variations in the electrical field to pinpoint the exact location of a finger touch.</p>
+<p>Another possible extension would be audio output based on the current light configuration. This <a href="http://tonematrix.audiotool.com" target="_blank" rel="external">web app</a> is a pretty neat example of what you can do. Also, I could wire up a circuit to detect and process audio input, and create a music visualizer.</p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/LED-Table,-Part-1/">LED Table, Part 1</a></h1>
+  
+
+    <time datetime="2014-08-24T02:04:00.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="The_idea">The idea</h2><p>A few months ago, I decided it was time to start a new side project. I really enjoyed using Arduinos in my senior thesis, so I decided that my next project would be centered around them. Just like before, I started searching websites like hackaday.com and instructables.com for inspiration. Eventually, I stumbled upon the idea of a LED enabled coffee table. A lot of people had tried it before with varying degrees of success. However, I believed that there were still serious engineering challenges that could be solved or simplified, as well as significant areas to reduce cost.</p>
+<p>Here is a pretty neat example by a mechanical engineering student in Wisconsin (<a href="http://imgur.com/a/CGV17" target="_blank" rel="external">images</a>). Underneath the glass top was about 100 individually addressable LEDs. Each LED could change color and brightness, and they were all connected to the same SPI bus. In addition, the builder had wired each light cell with an IR detector and emitter to sense touches and objects on the glass surface. The end result was a beautiful frosted glass table that could create an instant dance party. </p>
+<p>I started the project with an intense research and design phase. I immediately decided that touch control was a secondary goal of the project, due to the cost and complexity of wiring each individual light cell. Next came determining the dimensions, material, costs, suppliers, etc. </p>
+<p><img src="model.png" alt="Google Sketch Up" title="Google Sketch Up"></p>
+<h2 id="Software">Software</h2><p>While waiting for all of my part to be delivered, I started working on the Arduino code. Controlling the lights was easy, using the very convenient FastSPI library. The next step was creating a website to control the light values (using the Ethernet shield to connect to the internet). A table is an inherently social object, so I knew I had to architect in multiuser support from the beginning. My first thought was use the Arduino as a webserver and create an API for the table. My actual server (cloud-hosting Linux server) would serve the UI, with the IP address of my Arduino hardcoded into the client code. The client could then query the status of each LED and set individual values. I succeeded in building a prototype but there were two crucial problems. First, I was running it off of my home network so I had to track my IP address and use port forwarding to expose my device to the Internet. Second, and more worrisome, the Arduino was incredibly slow. My solution to these challenges was to put a Raspberry Pi in front of the Arduino and to build out a socket.io server on my remote Linux instance. Socket.io wraps several technologies like long polling and websockets to allow the client and server to both push and pull commands. Now, my table is simply a client receiving commands from a set of other “user” clients. The Raspberry Pi (a headless Linux computer) manages the connection and forwards new commands to the Arduino over serial. </p>
+<p><img src="diagram.png" alt="System Architecture" title="System Architecture"></p>
+<p>One might wonder why I needed both an Arduino and a Raspberry Pi. I needed the Arduino because the RPi didn’t have a high enough clock speed for the WS2811 LED controllers. Also, the RPi was faster and cheaper than the Arduino WiFi shield. More generally, it was nice to have a dedicated component for each function, networking and hardware control, rather than one that could only sort of do both.</p>
+<p><img src="electronics.png" alt="Electronics" title="Electronics"></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Hexo-Blog-Setup/">Hexo Blog Setup</a></h1>
+  
+
+    <time datetime="2014-08-24T01:27:53.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Hexo_is_a_Node_module_for_generating_html_files_from_Markdown,_and_is_great_for_making_blog_posts-_The_best_method_seems_to_be_writing/generating_your_posts_on_a_local_computer,_then_deploying_your_project_to_the_remote_server-">Hexo is a Node module for generating html files from Markdown, and is great for making blog posts. The best method seems to be writing/generating your posts on a local computer, then deploying your project to the remote server.</h3><p>Installs<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install -g hexo</span><br></pre></td></tr></table></figure></p>
+<p>Start a new Hexo project<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init myblog&#10;cd myblog&#10;sudo npm install</span><br></pre></td></tr></table></figure></p>
+<p>Download the phase theme (optional)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/tommy351/hexo-theme-phase.git themes/phase</span><br></pre></td></tr></table></figure></p>
+<p>Configure your git repo, port #, etc<br><code>vi _config.yaml</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Hexo Configuration&#10;## Docs: http://hexo.io/docs/configuration.html&#10;## Source: https://github.com/hexojs/hexo/&#10;&#10;# Site&#10;title: Greasy Keys&#10;subtitle: hardware meets software&#10;description:&#10;author: Bereket Abraham&#10;email: babraham42@gmail.com&#10;language: en-US&#10;&#10;# URL&#10;## If your site is put in a subdirectory, set url as &#39;http://yoursite.com/child&#39; and root as &#39;/child/&#39;&#10;url: http://bereketabraham.com/blog&#10;root: /blog/&#10;permalink: :year/:month/:day/:title/&#10;tag_dir: tags&#10;archive_dir: archives&#10;category_dir: categories&#10;code_dir: downloads/code&#10;permalink_defaults:&#10;&#10;# Directory&#10;source_dir: source&#10;public_dir: public&#10;&#10;# Writing&#10;new_post_name: :year-:month-:day-:title.md&#10;default_layout: post&#10;titlecase: false # Transform title into titlecase&#10;external_link: true # Open external links in new tab&#10;filename_case: 0&#10;render_drafts: false&#10;post_asset_folder: false&#10;relative_link: false&#10;highlight:&#10;  enable: true&#10;  line_number: true&#10;  tab_replace:&#10;&#10;# Category &#38; Tag&#10;default_category: uncategorized&#10;category_map:&#10;tag_map:&#10;&#10;# Archives&#10;## 2: Enable pagination&#10;## 1: Disable pagination&#10;## 0: Fully Disable&#10;archive: 2&#10;category: 2&#10;tag: 2&#10;&#10;# Server&#10;## Hexo uses Connect as a server&#10;## You can customize the logger format as defined in&#10;## http://www.senchalabs.org/connect/logger.html&#10;port: 8008&#10;server_ip: localhost&#10;logger: false&#10;logger_format: dev&#10;&#10;# Date / Time format&#10;## Hexo uses Moment.js to parse and display date&#10;## You can customize the date format as defined in&#10;## http://momentjs.com/docs/#/displaying/format/&#10;date_format: MMM D YYYY&#10;time_format: H:mm:ss&#10;&#10;# Pagination&#10;## Set per_page to 0 to disable pagination&#10;per_page: 3&#10;pagination_dir: page&#10;&#10;# Disqus&#10;disqus_shortname:&#10;&#10;# Extensions&#10;## Plugins: https://github.com/hexojs/hexo/wiki/Plugins&#10;## Themes: https://github.com/hexojs/hexo/wiki/Themes&#10;theme: phase&#10;exclude_generator:&#10;&#10;# Deployment&#10;## Docs: http://hexo.io/docs/deployment.html&#10;deploy:&#10;  type: github&#10;  repo: https://github.com/babraham123/mysite-blog.git</span><br></pre></td></tr></table></figure></p>
+<p>Create a new post. Images also go in the source folder.<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new post &#34;Title&#34; &#10;vi source/_posts/Title.md</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Post title&#10;## subtitle&#10;&#10;**by Bereket Abraham**&#10;&#10;[Visit GitHub!](www.github.com)&#10;&#10;Filler paragraph.&#10;&#10;![](test.png)</span><br></pre></td></tr></table></figure>
+<p>Generate html files and deploy to git<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate --deploy</span><br></pre></td></tr></table></figure></p>
+<p>Start a test server to check your post. <a href="http://localhost:4000/blog/" target="_blank" rel="external">http://localhost:4000/blog/</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>How to run server on remote server in production environment.</strong><br>On remote server:</p>
+<p>Installs<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install node&#10;sudo yum install upstart&#10;sudo npm install -g forever</span><br></pre></td></tr></table></figure></p>
+<p>Clone git repo and create application file<br><code>vi blog_server.js</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">require(&#39;hexo&#39;).init(&#123;command: &#39;server&#39;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Add Hexo to the package config and install locally<br><code>vi package.json</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#10;  &#34;name&#34;: &#34;hexo-site&#34;,&#10;  &#34;version&#34;: &#34;2.8.2&#34;,&#10;  &#34;private&#34;: true,&#10;  &#34;dependencies&#34;: &#123;&#10;    &#34;hexo&#34;: &#34;2.8.2&#34;,&#10;    &#34;hexo-renderer-ejs&#34;: &#34;*&#34;,&#10;    &#34;hexo-renderer-stylus&#34;: &#34;*&#34;,&#10;    &#34;hexo-renderer-marked&#34;: &#34;*&#34;&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install</span><br></pre></td></tr></table></figure>
+<p>Create new Upstart service<br><code>vi /etc/init/myblog.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node hexo server for my blog - myblog&#8221;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respond&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=myblog&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=blog_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE&#10;end script&#10;&#10;post-start script&#10;   echo &#34;myblog started through forever + upstart&#8221;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start myblog</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Socketio-Setup/">Socket.io Setup</a></h1>
+  
+
+    <time datetime="2014-08-24T00:23:29.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Setting_up_the_Nginx_reverse_proxy_to_run_a_node_Socket-io_server_in_parallel_with_Django-_Using_Forever_and_Upstart_to_manage_the_Node_process-">Setting up the Nginx reverse proxy to run a node Socket.io server in parallel with Django. Using Forever and Upstart to manage the Node process.</h3><p>Install packages (centos)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install forever -g</span><br></pre></td></tr></table></figure></p>
+<p>Add all of application specific code. For beginners, use this <a href="http://www.nodebeginner.org/" target="_blank" rel="external">tutorial</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir mysocketio &#38;&#38; cd mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>Create the <code>package.json</code> file and locally install project packages<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
+<p>Set file permissions<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;chmod 755 /home&#10;chmod 755 /home/username&#10;chmod 755 /home/username/mysocketio -R&#10;chmod 644 /home/username/mysocketio/socketio_server.js&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p>Update Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><figcaption><span>"Add the following snippet to the top of your port 80 listener"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location /socket.io/public/ &#123;&#10;    root /home/babraham/mysocketio;&#10;&#125;&#10;&#10;location /socket.io/ &#123;&#10;    proxy_http_version 1.1;&#10;    proxy_set_header Upgrade $http_upgrade;&#10;    proxy_set_header Connection &#34;upgrade&#34;;&#10;    proxy_read_timeout 120s;&#10;    proxy_pass http://127.0.0.1:8002;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>You may need to install a more recent version of Nginx <a href="https://webtatic.com/packages/nginx14/" target="_blank" rel="external">cite</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm&#10;sudo yum install nginx16</span><br></pre></td></tr></table></figure></p>
+<p>Reload and restart<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Create a new Upstart service<br><code>vi /etc/init/mysocketio.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node server for socket.io connections - mysocketio&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respawn&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=mysocketio&#10;        PORT=8002&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=socketio_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE $PORT&#10;end script&#10;&#10;post-start script&#10;   echo &#34;mysocketio started through forever + upstart&#34;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://technosophos.com/2013/03/06/how-use-ubuntus-upstart-control-nodejs-forever.html" target="_blank" rel="external">Upstart + Forever</a></p>
+<p><a href="http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/" target="_blank" rel="external">Nginx</a></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Raspberry-Pi-Setup/">Raspberry Pi Setup</a></h1>
+  
+
+    <time datetime="2014-08-23T21:41:18.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><strong>How to setup a Raspberry Pi</strong> (assuming you’ve already bought the supporting components, like a power supply, wiki dongle, and ethernet cable.)</p>
+<p>Plug SD card into your computer to format</p>
+<p>Open disk utility and erase card. Set the name and the format to “MS-DOS (FAT)”<br><figure class="highlight"><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diskutil list&#10;# find your card, example /dev/disk38&#10;diskutil unmountdisk /dev/disk38</span><br></pre></td></tr></table></figure></p>
+<p>Download your pi OS image and cd to folder. <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="external">Download</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dd if=2014-06-20-wheezy-raspbian.img of=/dev/disk38 bs=2m&#10;# (flash OS image onto card, if=source, of=target, bs=size)</span><br></pre></td></tr></table></figure></p>
+<p>Plug in peripherals, like keyboard, ethernet cable, and power</p>
+<p>In order to locate your pi on the wifi network, install mmap, run it, and ssh into your pi<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ifconfig (get local ip address)&#10;nmap -sn 192.168.1.0/24&#10;ssh pi@192.168.1.88&#10;# username= pi&#10;# password= raspberry</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config&#10;(set password, OS size, locale, )&#10;username= pi&#10;password= typical</span><br></pre></td></tr></table></figure>
+<p>Set up environment<br><figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update&#10;sudo apt-get upgrade&#10;sudo apt-get autoremove</span><br></pre></td></tr></table></figure></p>
+<p>Wifi dongle setup<br><figure class="highlight"><figcaption><span>"on pi"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cp /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant/wpa_supplicant.conf.bak&#10;sudo nano /etc/wpa_supplicant/wpa_supplicant.conf</span><br></pre></td></tr></table></figure></p>
+<p>Change your ssid/password<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev&#10;update_config=1&#10;&#10;network=&#123;&#10;        ssid=&#34;your_ssid&#34;&#10;        psk=&#34;your_pass&#34;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Reboot and log back in<br><code>sudo reboot</code><br><figure class="highlight"><figcaption><span>"on computer"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sn 192.168.1.0/24&#10;# find ip address again&#10;ssh pi@192.168.1.56</span><br></pre></td></tr></table></figure></p>
+<p><strong>Extra:</strong><br>for GUI, after you plugin a monitor<br><code>startx</code> </p>
+<p>Shutdown command<br><code>sudo shutdown -h now</code></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Setup-Gunicorn-+-Nginx-+-Upstart-for-Django/">Setup Gunicorn + Nginx + Upstart for Django</a></h1>
+  
+
+    <time datetime="2014-08-23T21:11:29.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Nginx_is_a_high-performance_HTTP_server_and_reverse_proxy-_I_use_it_to_serve_static_files_and_route_incoming_requests_among_multiple_web_applications-_Gunicorn_is_a_Python_WSGI_HTTP_Server_for_UNIX_that_I_use_to_serve_Django-_Together,_they_form_a_more_flexible_and_robust_solution_than_Apache-">Nginx is a high-performance HTTP server and reverse proxy. I use it to serve static files and route incoming requests among multiple web applications. Gunicorn is a Python WSGI HTTP Server for UNIX that I use to serve Django. Together, they form a more flexible and robust solution than Apache.</h3><h3 id="Upstart_is_a_great_utility_for_starting,_stopping,_and_supervising_tasks_as_if_they_were_services-">Upstart is a great utility for starting, stopping, and supervising tasks as if they were services.</h3><p>Install<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install gunicorn&#10;sudo yum install nginx&#10;sudo yum install upstart</span><br></pre></td></tr></table></figure></p>
+<p>Record the number of CPUs, use that next for the number of <code>worker_processes</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lscpu | grep &#39;^CPU(s)&#39;</span><br></pre></td></tr></table></figure></p>
+<p><code>vi /etc/nginx/nginx.conf</code><br><figure class="highlight"><figcaption><span>"Insert the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user              nginx;&#10;worker_processes  1;</span><br></pre></td></tr></table></figure></p>
+<p>Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual host using mix of IP-, name-, and port-based configuration&#10;# from the django app, mysite, running on gunicorn&#10;&#10;server &#123;&#10;    listen       80;&#10;#    listen       someip:8080;&#10;    server_name  sitename.com;&#10;&#10;    access_log  /var/log/nginx/mysite.log;&#10;&#10;    location / &#123;&#10;        proxy_set_header Host $http_host;&#10;        proxy_set_header X-Forwarded-Host $server_name;&#10;        proxy_set_header X-Real-IP $remote_addr;&#10;        proxy_pass http://127.0.0.1:8001;&#10;    &#125;&#10;&#10;    location /media/ &#123;&#10;        root /home/username/mysite/media;&#10;    &#125;&#10;&#10;    location /static/ &#123;&#10;        root /home/username/mysite/static;&#10;    &#125;&#10;&#10;    location /admin/media/ &#123;&#10;        # this changes depending on your python version&#10;        root /usr/lib/python2.6/site-packages/django/contrib;&#10;    &#125;&#10;&#10;    error_page   500 502 503 504  /home/username/mysite/static/50x.html;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Reload after configuration changes<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Upstart Configuration<br><code>vi /etc/init/mysite.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;My website - mysite&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;respawn&#10;respawn limit 10 5&#10;&#10;script&#10;                NAME=mysite&#10;                PORT=8001&#10;                NUM_WORKERS=2&#10;                TIMEOUT=120&#10;                USER=username&#10;                GROUP=wheel&#10;                LOGFILE=/var/log/gunicorn/$NAME.log&#10;                LOGDIR=$(dirname $LOGFILE)&#10;                test -d $LOGDIR || mkdir -p $LOGDIR&#10;                cd /home/$USER/$NAME&#10;                exec gunicorn_django \&#10;                         -w $NUM_WORKERS -t $TIMEOUT \&#10;                        --user=$USER --group=$GROUP --log-level=debug \&#10;                        --name=$NAME -b 127.0.0.1:$PORT \&#10;                        --log-file=$LOGFILE 2&#62;&#62;$LOGFILE&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the gunicorn/django service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysite</span><br></pre></td></tr></table></figure></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Install-Pandoc/">Install Pandoc</a></h1>
+  
+
+    <time datetime="2014-08-23T21:09:41.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p>Pandoc is a requirement for Nbconvert, a useful iPython library that allows you to convert ipython notebooks into various formats. The formats include pdf, html, even latex. Pandoc is the core document converter library and is written in Haskell, so it’s a bit difficult to install. </p>
+<p><a href="http://ipython.org/ipython-doc/rel-1.0.0/interactive/nbconvert.html" target="_blank" rel="external">Docs</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install gcc&#10;sudo wget http://sherkin.justhub.org/el6/RPMS/x86_64/justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo rpm -ivh --replacepkgs justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo yum install haskell&#10;export PATH=/usr/hs/bin:~/.cabal/bin:$PATH&#10;cabal update&#10;cabal install cabal-dev&#10;cabal install pandoc</span><br></pre></td></tr></table></figure>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/Logging-in-Python/">Logging in Python</a></h1>
+  
+
+    <time datetime="2014-08-23T21:04:58.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p>Often times you want to log errors and debugging information in a log file. This is especially helpful for scripts that take a long time to run or run on a reoccurring basis. Below are some helpful hints and code snippets on how to do this in Python.</p>
+<p>Include this code at the top of your script as a global variable. You can also use the same code to log info from helper scripts and imported libraries.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import logging&#10;logger = logging.getLogger(__name__)</span><br></pre></td></tr></table></figure>
+<p>In your script’s main function (the one that executes all of your code), you need to set the basic configuration params of the logger. This should only be called once. Set the name of the log file, formatting, etc. I like to call the log file the name of my main script, using sys.argv (remember to import sys)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &#34;__main__&#34;:&#10;    logname = sys.argv[0][:-3] + &#34;.log&#34;&#10;    logging.basicConfig(level=logging.DEBUG, filename=logname, format=&#39;%(asctime)s %(levelname)s: %(name)s: %(message)s&#39;)</span><br></pre></td></tr></table></figure>
+<p>Finally, you can log messages to your log file in any .py file where you have initialized the logger object. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">def foo():&#10;    logger.debug(&#34;Hello, world&#34;)</span><br></pre></td></tr></table></figure>
+<p><strong>Log levels</strong> are a clever way to organize your log files. Typically you want a lot more information while debugging than while in production. Thus, you can send very description, long messages as <code>DEBUG</code> messages and shorter ones as <code>INFO</code> messages. Then you specify which log level you want when or set the configuration params. This determines which messages actually get written to your log file. The cool thing is that the log level X also gives you all of the log levels below X. So a log level of <code>WARNING</code> writes <code>WARNING</code>, <code>ERROR</code>, and <code>CRITICAL</code> messages to the log file. </p>
+<ul>
+<li><code>DEBUG</code>: Detailed information, typically of interest only when diagnosing problems.</li>
+<li><code>INFO</code>: Confirmation that things are working as expected.</li>
+<li><code>WARNING</code>: An indication that something unexpected happened, or indicative of some problem in the near future (e.g. ‘disk space low’). The software is still working as expected.</li>
+<li><code>ERROR</code>: Due to a more serious problem, the software has not been able to perform some function.</li>
+<li><code>CRITICAL</code>: A serious error, indicating that the program itself may be unable to continue running.</li>
+</ul>
+<p><strong>How to catch Exceptions</strong><br>Certain commands are particularly error prone, like saving model objects in AnxPy. In that case, you want to catch and handle any exceptions, in order to prevent them from automatically terminating your program. You can catch all exceptions or only certain kinds. Here’s an example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">try:&#10;    # risky code&#10;    my_creative.save()&#10;except Exception as e:&#10;    # failure&#10;    message = &#34;Creative &#34; + str(my_creative.id) + &#34; failed on save.&#34;&#10;    logger.info(message)&#10;    logger.exception(e)&#10;else:&#10;    # success!&#10;    message = &#34;Creative &#34; + str(my_creative.id) + &#34; was saved.&#34;&#10;    logger.info(message)</span><br></pre></td></tr></table></figure>
+<p><strong>Advanced: Log all exceptions</strong><br>Insert this code at the top of your main script in order to log all exceptions, regardless of type or where they occur. They will still interrupt your program, but now they are also sent to your log file. Also, you can now decide whether or not to write to the standard error stream, stderr (useful for cron jobs). </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import logging, sys&#10;logger = logging.getLogger(__name__)&#10; &#10;def stderr_override(typeE, valueE, tracebackE):&#10;    typeE = &#34;\n  Error Type: &#34; + str(typeE)&#10;    valueE = &#34;\n  Error Value: &#34; + str(valueE)&#10;    tracebackE = &#34;\n  Traceback: &#34; + &#34;    &#34;.join(traceback.format_tb(tracebackE)) + &#34;\n&#34;&#10;    messageE = typeE + valueE + tracebackE&#10; &#10;    logger.exception(messageE)&#10;    print &#62;&#62; sys.stderr, messageE&#10; &#10;# send any uncaught errors to the logs&#10;sys.excepthook = stderr_override</span><br></pre></td></tr></table></figure>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+    <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title"><a href="/blog/2014/08/23/How-to-setup-Django-+-mysql-+-Apache/">How to setup Django + mysql + Apache</a></h1>
+  
+
+    <time datetime="2014-08-23T18:21:36.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Below_is_a_step_by_step_account_of_how_to_set_up_a_django_(1-6)_web_application_on_a_CentOS_(6-4)_server,_running_Apache_(2-5)_and_python_(2-6,_2-7)">Below is a step by step account of how to set up a django (1.6) web application on a CentOS (6.4) server, running Apache (2.5) and python (2.6, 2.7)</h3><p>1: <strong>Login as root and set up a new user</strong></p>
+<p>You probably want to eventually disable root login<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@[ip address]</span><br></pre></td></tr></table></figure></p>
+<p>Create user<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useradd myuser&#10;passwd myuser</span><br></pre></td></tr></table></figure></p>
+<p>Add user to a sudo enabled group<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -a -G wheel myuser</span><br></pre></td></tr></table></figure></p>
+<p>Allow the wheel group to use sudo by editing the shudders file<br><code>visudo -f /etc/sudoers</code><br><figure class="highlight"><figcaption><span>"edit the following snippet"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">## Allows people in group wheel to run all commands&#10;# %wheel        ALL=(ALL)       ALL</span><br></pre></td></tr></table></figure></p>
+<p><code>exit</code></p>
+<p>2: <strong>Login without typing in your password (not strictly necessary)</strong> <a href="http://wiki.centos.org/HowTos/Network/SecuringSSH" target="_blank" rel="external">cite</a></p>
+<p>On your local machine, generate public/private key<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure></p>
+<p>Set permissions on your private key<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~/.ssh&#10;chmod 600 ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure></p>
+<p>Copy your public key onto remote server<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp ~/.ssh/id_rsa.pub myuser@[ip address]:/home/myuser</span><br></pre></td></tr></table></figure></p>
+<p>On remote machine<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh myuser@[ip address]&#10;mkdir ~/.ssh&#10;touch ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>Add public key to authorized list<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat id_rsa.pub &#62;&#62; ~/.ssh/authorized_keys&#10;rm id_rsa.pub</span><br></pre></td></tr></table></figure></p>
+<p>Set permissions<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~/.ssh&#10;chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>3: <strong>Install necessary packages. Since this is for CentOS, we yum.</strong> <a href="http://itekblog.com/django-centos-6-4/" target="_blank" rel="external">cite</a></p>
+<p>Check centos version. These cmds are for centos 6.4<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/redhat-release</span><br></pre></td></tr></table></figure></p>
+<p><code>su</code></p>
+<p>Add the EPEL repositories to get Django<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /opt/&#10;wget http://mirrors.nl.eu.kernel.org/fedora-epel/6/i386/epel-release-6-8.noarch.rpm&#10;rpm -Uvh epel-release-6-8.noarch.rpm&#10;rm epel-release-6-8.noarch.rpm -f</span><br></pre></td></tr></table></figure></p>
+<p>Install packages<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum upgrade&#10;yum install python&#10;&#9;(should be 2.6.6)&#10;yum install sqlite&#10;yum install mod_wsgi&#10;yum install mysql mysql-server&#10;&#10;yum install python-pip&#10;pip install Django==1.6&#10;&#9;(1.6 or whatever version you want)&#10;yum -y install mysql-devel&#10;yum install MySQL-python</span><br></pre></td></tr></table></figure></p>
+<p>Check to see if django works<br><code>python</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import django&#10;print django.get_version()&#10;quit()</span><br></pre></td></tr></table></figure></p>
+<p><code>exit</code></p>
+<p>4: <strong>Django</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">django-admin.py startproject mysite&#10;cd mysite</span><br></pre></td></tr></table></figure>
+<p>Add all of application specific code. For beginners, use this <a href="https://docs.djangoproject.com/en/1.6/intro/tutorial01/" target="_blank" rel="external">tutorial</a></p>
+<p>5: <strong>Create a mysql database (or skip this and use mysqlite)</strong></p>
+<p><code>su</code></p>
+<p>Get mysql working, choose a password<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chkconfig --levels 235 mysqld on&#10;/etc/init.d/mysqld start&#10;mysql_secure_installation</span><br></pre></td></tr></table></figure></p>
+<p>Create a new mysql user<br><code>mysql -u root -p</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database mysitedb;&#10;GRANT ALL PRIVILEGES ON mysitedb.* To &#39;user&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;password&#39;;&#10;quit;</span><br></pre></td></tr></table></figure></p>
+<p><code>exit</code></p>
+<p>Add the details to your database to the django settings file<br><code>vi ~/mysite/mysite/settings.py</code><br><figure class="highlight"><figcaption><span>"Add the following snippets"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ALLOWED_HOSTS = [&#39;my.server.ip.address&#39;]&#10;&#10;DATABASES = &#123;&#10;    &#39;default&#39;: &#123;&#10;        # Add &#39;postgresql_psycopg2&#39;, &#39;postgresql&#39;, &#39;mysql&#39;, &#39;sqlite3&#39; or &#39;oracle&#39;.                                        &#10;        &#39;ENGINE&#39;: &#39;django.db.backends.mysql&#39;,&#10;        &#39;NAME&#39;: &#39;mysitedb&#39;,&#10;        &#39;USER&#39;: &#39;mysiteuser&#39;,&#10;        &#39;PASSWORD&#39;: &#39;password&#39;,&#10;        &#39;HOST&#39;: &#39;&#39;,&#10;        &#39;PORT&#39;: &#39;&#39;,&#10;    &#125;&#10;&#125;&#10;&#10;TEMPLATE_DIRS = (&#10;    os.path.join(BASE_DIR, &#34;templates&#34;),&#10;)</span><br></pre></td></tr></table></figure></p>
+<p>Have python create mysql tables<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ~/mysite/&#10;python manage.py syncdb&#10;python manage.py sql [name of app]  # if you have any apps&#10;python manage.py syncdb</span><br></pre></td></tr></table></figure></p>
+<p>6: <strong>Set up mod_wsgi (A python library for Apache). For testing, you can skip this and just use the development server that comes with django (instead of Apache).</strong></p>
+<p>Development server<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python manage.py runserver</span><br></pre></td></tr></table></figure></p>
+<p><code>su</code></p>
+<p>Configure apache module for django<br><code>vi /etc/httpd/conf.d/wsgi.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LoadModule wsgi_module modules/mod_wsgi.so&#10;&#10;&#60;VirtualHost *:80&#62;&#10;  ServerName www.mywebsite.com&#10;  ServerAlias mywebsite.com&#10;  ServerAdmin webmaster@mywebsite.com&#10;&#10;  Alias /static/admin/ /usr/lib/python2.6/site-packages/django/contrib/admin/static/admin/&#10;  Alias /robots.txt /home/username/mysite/static/robots.txt&#10;  Alias /favicon.ico /home/username/mysite/static/favicon.ico&#10;  AliasMatch ^/([^/]*\.css) /home/username/mysite/static/styles/$1&#10;&#10;  Alias /media/ /home/username/mysite/media/&#10;  &#60;Directory /home/username/mysite/media&#62;&#10;    Order deny,allow&#10;    Allow from all&#10;  &#60;/Directory&#62;&#10;&#10;  Alias /static/ /home/username/mysite/static/&#10;  &#60;Directory /home/username/mysite/static&#62;&#10;    Order deny,allow&#10;    Allow from all&#10;  &#60;/Directory&#62;&#10;&#10;#  WSGIDaemonProcess mywebsite.com python-path=/home/username/mysite:/usr/lib/python2.6/&#10;#  WSGIProcessGroup mywebsite.com&#10;&#10;  WSGIScriptAlias / /home/username/mysite/mysite/wsgi.py&#10;&#10;  &#60;Directory /home/username/mysite/mysite&#62;&#10;    &#60;Files wsgi.py&#62;&#10;#      WSGIProcessGroup mywebsite.com&#10;      Order allow,deny&#10;      Allow from all&#10;    &#60;/Files&#62;&#10;  &#60;/Directory&#62;&#10;&#10;&#60;/VirtualHost&#62;</span><br></pre></td></tr></table></figure></p>
+<p>Restart after changing config files<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apachectl restart&#10;# or, if that fails try this version&#10;/sbin/service httpd restart</span><br></pre></td></tr></table></figure></p>
+<p>other commands<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apachectl start&#10;apachectl stop&#10;apachectl status&#10;httpd -v</span><br></pre></td></tr></table></figure></p>
+<p>Testing: <code>vi /var/www/html/index.html</code></p>
+<p>7: <strong>Troubleshooting 403 permission denied errors. After every change, restart apache and check website.</strong></p>
+<p>Set user permissions for project files<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;chmod 755 /home&#10;chmod 755 /home/username&#10;chmod 755 /home/username/mysite -R&#10;chmod 644 /home/username/mysite/wsgi.py&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p>Add project folder to system path<br><code>vi mysite/wsgi.py</code><br><figure class="highlight"><figcaption><span>"Add snippet to the top of the file"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import sys&#10;sys.path.append(&#39;/home/username&#39;)&#10;sys.path.append(&#39;/home/username/mysite&#39;)</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://blog.endpoint.com/2010/02/selinux-httpd-modwsgi-26-rhel-centos-5.html" target="_blank" rel="external">Problems with SELinux</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;setsebool -P httpd_can_network_connect on&#10;setsebool -P httpd_enable_homedirs on&#10;setsebool -P httpd_can_sendmail on&#10;restorecon -vR /etc/httpd&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://code.google.com/p/modwsgi/wiki/WhereToGetHelp?tm=6#Conference_Presentations" target="_blank" rel="external">Config problems on CentOS</a></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+  
+
+  <nav id="pagenavi">
+  
+  
+    <a href="/blog/archives/2014/page/2/" class="alignright next">下一頁</a>
+  
+  <div class="clearfix"></div>
+</nav>
+</div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/blog/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2017 Bereket Abraham
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/blog/js/jquery.imagesloaded.min.js"></script>
+<script src="/blog/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/blog/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/blog/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/blog/js/phasebeam.js"></script>
+</body>
+</html>
