@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://bereketabraham.com/blog/2017/05/01/Interview-with-Issayas/</loc>
+    <lastmod>2017-10-02T03:07:00.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://bereketabraham.com/blog/2014/08/24/Decoupled-Web-Apps/</loc>
     <lastmod>2015-11-22T03:53:12.000Z</lastmod>
   </url>
@@ -12,12 +17,7 @@
   </url>
   
   <url>
-    <loc>http://bereketabraham.com/blog/2014/08/22/Thesis-Design/</loc>
-    <lastmod>2015-03-22T07:40:25.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://bereketabraham.com/blog/2014/08/23/Socketio-Setup/</loc>
+    <loc>http://bereketabraham.com/blog/2014/08/24/LED-Table,-Part-2/</loc>
     <lastmod>2015-03-22T07:40:25.000Z</lastmod>
   </url>
   
@@ -27,7 +27,7 @@
   </url>
   
   <url>
-    <loc>http://bereketabraham.com/blog/2014/08/23/Hexo-Blog-Setup/</loc>
+    <loc>http://bereketabraham.com/blog/2014/08/22/Thesis-Design/</loc>
     <lastmod>2015-03-22T07:40:25.000Z</lastmod>
   </url>
   
@@ -42,7 +42,7 @@
   </url>
   
   <url>
-    <loc>http://bereketabraham.com/blog/2014/08/24/LED-Table,-Part-2/</loc>
+    <loc>http://bereketabraham.com/blog/2014/08/23/Socketio-Setup/</loc>
     <lastmod>2015-03-22T07:40:25.000Z</lastmod>
   </url>
   
@@ -63,6 +63,11 @@
   
   <url>
     <loc>http://bereketabraham.com/blog/2014/08/23/How-to-setup-Django-+-mysql-+-Apache/</loc>
+    <lastmod>2015-03-22T07:40:25.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://bereketabraham.com/blog/2014/08/23/Hexo-Blog-Setup/</loc>
     <lastmod>2015-03-22T07:40:25.000Z</lastmod>
   </url>
   

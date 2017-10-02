@@ -44,6 +44,57 @@
   <header>
     
   
+    <h1 class="title"><a href="/blog/2014/08/23/Socketio-Setup/">Socket.io Setup</a></h1>
+  
+
+    <time datetime="2014-08-24T00:23:29.000Z">
+  <span class="day">23</span><span class="month">Aug</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Setting_up_the_Nginx_reverse_proxy_to_run_a_node_Socket-io_server_in_parallel_with_Django-_Using_Forever_and_Upstart_to_manage_the_Node_process-">Setting up the Nginx reverse proxy to run a node Socket.io server in parallel with Django. Using Forever and Upstart to manage the Node process.</h3><p>Install packages (centos)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install npm&#10;sudo npm install forever -g</span><br></pre></td></tr></table></figure></p>
+<p>Add all of application specific code. For beginners, use this <a href="http://www.nodebeginner.org/" target="_blank" rel="external">tutorial</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir mysocketio &#38;&#38; cd mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>Create the <code>package.json</code> file and locally install project packages<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br></pre></td></tr></table></figure></p>
+<p>Set file permissions<br>  Folders (0755 = User:rwx Group:r-x World:r-x)<br>  Files (0644 = User:rwx Group:r World:r)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su&#10;chmod 755 /home&#10;chmod 755 /home/username&#10;chmod 755 /home/username/mysocketio -R&#10;chmod 644 /home/username/mysocketio/socketio_server.js&#10;exit</span><br></pre></td></tr></table></figure></p>
+<p>Update Nginx configuration<br><code>vi /etc/nginx/conf.d/mysite.conf</code><br><figure class="highlight"><figcaption><span>"Add the following snippet to the top of your port 80 listener"</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location /socket.io/public/ &#123;&#10;    root /home/babraham/mysocketio;&#10;&#125;&#10;&#10;location /socket.io/ &#123;&#10;    proxy_http_version 1.1;&#10;    proxy_set_header Upgrade $http_upgrade;&#10;    proxy_set_header Connection &#34;upgrade&#34;;&#10;    proxy_read_timeout 120s;&#10;    proxy_pass http://127.0.0.1:8002;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>You may need to install a more recent version of Nginx <a href="https://webtatic.com/packages/nginx14/" target="_blank" rel="external">cite</a><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm&#10;sudo yum install nginx16</span><br></pre></td></tr></table></figure></p>
+<p>Reload and restart<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nginx -s reload&#10;sudo service nginx restart</span><br></pre></td></tr></table></figure></p>
+<p>Create a new Upstart service<br><code>vi /etc/init/mysocketio.conf</code><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">description &#34;node server for socket.io connections - mysocketio&#34;&#10;start on runlevel [2345]&#10;stop on runlevel [06]&#10;&#10;expect fork&#10;respawn&#10;respawn limit 10 5&#10;console output&#10;&#10;script&#10;        NAME=mysocketio&#10;        PORT=8002&#10;        USER=username&#10;        GROUP=wheel&#10;        MAINFILE=socketio_server.js&#10;        LOGFILE=/var/log/forever/$NAME.log&#10;        OUTFILE=/var/log/forever/$NAME_stdout.log&#10;        ERRFILE=/var/log/forever/$NAME_stderr.log&#10;        LOGDIR=$(dirname $LOGFILE)&#10;        test -d $LOGDIR || mkdir -p $LOGDIR&#10;        cd /home/$USER/$NAME&#10;&#10;        exec forever start -a -l $LOGFILE -o $OUTFILE -e $ERRFILE $MAINFILE $PORT&#10;end script&#10;&#10;post-start script&#10;   echo &#34;mysocketio started through forever + upstart&#34;&#10;end script</span><br></pre></td></tr></table></figure></p>
+<p>Start the Node service<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo start mysocketio</span><br></pre></td></tr></table></figure></p>
+<p>View status of all services<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo initctl list</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://technosophos.com/2013/03/06/how-use-ubuntus-upstart-control-nodejs-forever.html" target="_blank" rel="external">Upstart + Forever</a></p>
+<p><a href="http://blog.martinfjordvald.com/2013/02/websockets-in-nginx/" target="_blank" rel="external">Nginx</a></p>
+
+    
+    
+    <footer class="meta">
+      
+      
+      
+    </footer>
+    
+  </div>
+  
+</article>
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
     <h1 class="title"><a href="/blog/2014/08/23/Raspberry-Pi-Setup/">Raspberry Pi Setup</a></h1>
   
 
@@ -125,48 +176,6 @@
   
 </article>
 
-  <article class="post">
-  
-    <div class="gallery">
-  <div class="photoset">
-    
-      <img src="">
-    
-  </div>
-  <div class="control">
-    <div class="prev"></div>
-    <div class="next"></div>
-  </div>
-</div>
-  
-  <header>
-    
-  
-    <h1 class="title"><a href="/blog/2014/08/23/Install-Pandoc/">Install Pandoc</a></h1>
-  
-
-    <time datetime="2014-08-23T21:09:41.000Z">
-  <span class="day">23</span><span class="month">Aug</span>
-</time>
-  </header>
-  <div class="entry-content">
-    
-      <p>Pandoc is a requirement for Nbconvert, a useful iPython library that allows you to convert ipython notebooks into various formats. The formats include pdf, html, even latex. Pandoc is the core document converter library and is written in Haskell, so it’s a bit difficult to install. </p>
-<p><a href="http://ipython.org/ipython-doc/rel-1.0.0/interactive/nbconvert.html" target="_blank" rel="external">Docs</a></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install gcc&#10;sudo wget http://sherkin.justhub.org/el6/RPMS/x86_64/justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo rpm -ivh --replacepkgs justhub-release-2.0-4.0.el6.x86_64.rpm&#10;sudo yum install haskell&#10;export PATH=/usr/hs/bin:~/.cabal/bin:$PATH&#10;cabal update&#10;cabal install cabal-dev&#10;cabal install pandoc</span><br></pre></td></tr></table></figure>
-
-    
-    
-    <footer class="meta">
-      
-      
-      
-    </footer>
-    
-  </div>
-  
-</article>
-
 
 <nav id="pagenavi">
   
@@ -186,7 +195,7 @@
 </div>
 <p>
   
-  &copy; 2015 Bereket Abraham
+  &copy; 2017 Bereket Abraham
   
 </p>
 <div class="clearfix"></div></footer>
